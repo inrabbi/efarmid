@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Management | eFarmerID Nigeria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --secondary-green: #218838;
+            --light-green: #d4edda;
+            --dark-green: #1e7e34;
+            --accent-yellow: #ffc107;
+            --accent-blue: #17a2b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .loan-card {
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .loan-card.pending {
+            border-left-color: var(--accent-yellow);
+        }
+        
+        .loan-card.rejected {
+            border-left-color: #dc3545;
+        }
+        
+        .loan-card.repaid {
+            border-left-color: var(--accent-blue);
+        }
+        
+        .progress-thin {
+            height: 6px;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .repayment-progress {
+            position: relative;
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .repayment-progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: var(--primary-green);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .loan-illustration {
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1), rgba(23, 162, 184, 0.1));
+            border-radius: 10px;
+        }
+        
+        .calculator-input {
+            border-radius: 0;
+            border: none;
+            border-bottom: 2px solid #dee2e6;
+            padding-left: 0;
+            padding-right: 0;
+            background-color: transparent;
+        }
+        
+        .calculator-input:focus {
+            box-shadow: none;
+            border-bottom-color: var(--primary-green);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-green);
+        }
+        
+        @media (max-width: 768px) {
+            .loan-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-tree-fill me-2"></i>eFarmerID
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="bi bi-house-door me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="myprofile.html"><i class="bi bi-person me-1"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="subsidies.html"><i class="bi bi-cash-stack me-1"></i> Subsidies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html"><i class="bi bi-shop me-1"></i> Marketplace</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="loans.html"><i class="bi bi-cash-coin me-1"></i> Loans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-1"><i class="bi bi-cash-coin text-success me-2"></i>Loan Management</h2>
+                        <p class="text-muted mb-0">View and manage your agricultural loans</p>
+                    </div>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#applyLoanModal">
+                        <i class="bi bi-plus-circle me-1"></i> Apply for Loan
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-funnel me-2 text-success"></i>Filter Loans
+                        </h5>
+                        
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#" data-filter="all">
+                                    <i class="bi bi-collection me-2"></i> All Loans
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="active">
+                                    <i class="bi bi-lightning-charge me-2"></i> Active
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="pending">
+                                    <i class="bi bi-hourglass me-2"></i> Pending
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="repaid">
+                                    <i class="bi bi-check-circle me-2"></i> Repaid
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-filter="rejected">
+                                    <i class="bi bi-x-circle me-2"></i> Rejected
+                                </a>
+                            </li>
+                        </ul>
+                        
+                        <hr class="my-3">
+                        
+                        <h6 class="mb-3"><i class="bi bi-graph-up me-2 text-success"></i>Loan Summary</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span>Total Borrowed</span>
+                                <span class="fw-bold">₦850,000</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span>Total Repaid</span>
+                                <span class="fw-bold">₦520,000</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span>Active Loans</span>
+                                <span class="fw-bold">2</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span>Credit Score</span>
+                                <span class="fw-bold text-success">Good (720)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-calculator me-2 text-success"></i>Loan Calculator
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Loan Amount (₦)</label>
+                            <input type="number" class="form-control calculator-input mb-2" id="calcAmount" value="500000">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Duration (Months)</label>
+                            <select class="form-select calculator-input" id="calcDuration">
+                                <option>6</option>
+                                <option selected>12</option>
+                                <option>18</option>
+                                <option>24</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Interest Rate</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control calculator-input" id="calcRate" value="9.5">
+                                <span class="input-group-text calculator-input">%</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-success w-100" id="calculateBtn">
+                            <i class="bi bi-calculator-fill me-1"></i> Calculate
+                        </button>
+                        
+                        <div class="mt-3 p-3 loan-illustration">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Monthly Payment:</span>
+                                <span class="fw-bold" id="monthlyPayment">₦45,833</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Total Interest:</span>
+                                <span class="fw-bold" id="totalInterest">₦50,000</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span>Total Repayment:</span>
+                                <span class="fw-bold" id="totalRepayment">₦550,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content Area -->
+            <div class="col-lg-9">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0"><i class="bi bi-cash-stack me-2 text-success"></i>My Loan Applications</h5>
+                            <div class="d-flex">
+                                <input type="text" class="form-control form-control-sm me-2" placeholder="Search loans..." style="width: 200px;">
+                                <button class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-filter"></i> Filters
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row" id="loanContainer">
+                            <!-- Active Loan -->
+                            <div class="col-md-6 mb-4 loan-item active">
+                                <div class="card loan-card h-100">
+                                    <span class="badge bg-success status-badge">Active</span>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">ABP Loan #ABP-78945</h5>
+                                                <p class="text-muted small mb-0">Anchor Borrowers' Program</p>
+                                            </div>
+                                            <span class="badge bg-success bg-opacity-10 text-success">9.5% Interest</span>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                                <span>Disbursed: 15 Jan 2023</span>
+                                                <span>Due: 15 Jan 2024</span>
+                                            </div>
+                                            <div class="repayment-progress">
+                                                <div class="repayment-progress-bar" style="width: 42%;"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-between small text-muted mt-1">
+                                                <span>42% repaid</span>
+                                                <span>₦210,000 of ₦500,000</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="small text-muted">Amount</div>
+                                                <div class="fw-bold">₦500,000</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="small text-muted">Monthly Payment</div>
+                                                <div class="fw-bold">₦45,833</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-receipt me-1"></i> Statement
+                                            </button>
+                                            <button class="btn btn-sm btn-success">
+                                                <i class="bi bi-credit-card me-1"></i> Make Payment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Active Loan 2 -->
+                            <div class="col-md-6 mb-4 loan-item active">
+                                <div class="card loan-card h-100">
+                                    <span class="badge bg-success status-badge">Active</span>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Commercial Loan #COM-32681</h5>
+                                                <p class="text-muted small mb-0">First Bank Nigeria</p>
+                                            </div>
+                                            <span class="badge bg-success bg-opacity-10 text-success">14% Interest</span>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                                <span>Disbursed: 5 Mar 2023</span>
+                                                <span>Due: 5 Mar 2024</span>
+                                            </div>
+                                            <div class="repayment-progress">
+                                                <div class="repayment-progress-bar" style="width: 28%;"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-between small text-muted mt-1">
+                                                <span>28% repaid</span>
+                                                <span>₦84,000 of ₦300,000</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="small text-muted">Amount</div>
+                                                <div class="fw-bold">₦300,000</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="small text-muted">Monthly Payment</div>
+                                                <div class="fw-bold">₦28,500</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-receipt me-1"></i> Statement
+                                            </button>
+                                            <button class="btn btn-sm btn-success">
+                                                <i class="bi bi-credit-card me-1"></i> Make Payment
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Pending Loan -->
+                            <div class="col-md-6 mb-4 loan-item pending">
+                                <div class="card loan-card h-100 pending">
+                                    <span class="badge bg-warning status-badge">Pending</span>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Equipment Loan #EQP-98732</h5>
+                                                <p class="text-muted small mb-0">BOA Agricultural Loan</p>
+                                            </div>
+                                            <span class="badge bg-warning bg-opacity-10 text-warning">12% Interest</span>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between small text-muted mb-2">
+                                                <span>Applied: 10 May 2023</span>
+                                                <span>Status: Under Review</span>
+                                            </div>
+                                            <div class="progress progress-thin">
+                                                <div class="progress-bar bg-warning" style="width: 60%;"></div>
+                                            </div>
+                                            <div class="small text-muted mt-1">Verification 60% complete</div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="small text-muted">Amount Requested</div>
+                                                <div class="fw-bold">₦750,000</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="small text-muted">Duration</div>
+                                                <div class="fw-bold">18 Months</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-pencil me-1"></i> Edit
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-danger">
+                                                <i class="bi bi-trash me-1"></i> Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Repaid Loan -->
+                            <div class="col-md-6 mb-4 loan-item repaid">
+                                <div class="card loan-card h-100 repaid">
+                                    <span class="badge bg-primary status-badge">Repaid</span>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Input Loan #INP-45621</h5>
+                                                <p class="text-muted small mb-0">CBN Intervention Fund</p>
+                                            </div>
+                                            <span class="badge bg-primary bg-opacity-10 text-primary">5% Interest</span>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                                <span>Disbursed: 10 Aug 2022</span>
+                                                <span>Repaid: 10 Feb 2023</span>
+                                            </div>
+                                            <div class="repayment-progress">
+                                                <div class="repayment-progress-bar" style="width: 100%;"></div>
+                                            </div>
+                                            <div class="d-flex justify-content-between small text-muted mt-1">
+                                                <span>100% repaid</span>
+                                                <span>₦210,000 of ₦210,000</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="small text-muted">Amount</div>
+                                                <div class="fw-bold">₦200,000</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="small text-muted">Duration</div>
+                                                <div class="fw-bold">6 Months</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-receipt me-1"></i> Statement
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-repeat me-1"></i> Reapply
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Rejected Loan -->
+                            <div class="col-md-6 mb-4 loan-item rejected">
+                                <div class="card loan-card h-100 rejected">
+                                    <span class="badge bg-danger status-badge">Rejected</span>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Expansion Loan #EXP-78214</h5>
+                                                <p class="text-muted small mb-0">Commercial Bank Loan</p>
+                                            </div>
+                                            <span class="badge bg-danger bg-opacity-10 text-danger">15% Interest</span>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between small text-muted mb-2">
+                                                <span>Applied: 15 Jan 2023</span>
+                                                <span>Status: Rejected</span>
+                                            </div>
+                                            <div class="alert alert-danger small py-1 mb-0">
+                                                <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                                                Insufficient collateral provided
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <div class="small text-muted">Amount Requested</div>
+                                                <div class="fw-bold">₦1,200,000</div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="small text-muted">Duration</div>
+                                                <div class="fw-bold">24 Months</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-info-circle me-1"></i> Details
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-send me-1"></i> Resubmit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-center">
+                            <nav aria-label="Loan pagination">
+                                <ul class="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loan Products Section -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">
+                            <i class="bi bi-percent me-2 text-success"></i>Available Loan Products
+                        </h5>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Anchor Borrowers' Program</h5>
+                                                <p class="text-muted small">CBN Special Intervention Fund</p>
+                                            </div>
+                                            <span class="badge bg-success">5-9.5% Interest</span>
+                                        </div>
+                                        
+                                        <ul class="list-group list-group-flush mb-3">
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Maximum Amount</span>
+                                                <span class="fw-bold">₦5,000,000</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Repayment Period</span>
+                                                <span class="fw-bold">Up to 3 Years</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Eligibility</span>
+                                                <span class="fw-bold text-success">You qualify</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#applyLoanModal">
+                                            <i class="bi bi-send me-1"></i> Apply Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Commercial Farm Loan</h5>
+                                                <p class="text-muted small">Partner Financial Institutions</p>
+                                            </div>
+                                            <span class="badge bg-warning text-dark">12-18% Interest</span>
+                                        </div>
+                                        
+                                        <ul class="list-group list-group-flush mb-3">
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Maximum Amount</span>
+                                                <span class="fw-bold">₦10,000,000</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Repayment Period</span>
+                                                <span class="fw-bold">Up to 5 Years</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Collateral Required</span>
+                                                <span class="fw-bold">Yes</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <button class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#applyLoanModal">
+                                            <i class="bi bi-send me-1"></i> Apply Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Equipment Financing</h5>
+                                                <p class="text-muted small">BOA Special Program</p>
+                                            </div>
+                                            <span class="badge bg-primary">8-12% Interest</span>
+                                        </div>
+                                        
+                                        <ul class="list-group list-group-flush mb-3">
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Maximum Amount</span>
+                                                <span class="fw-bold">₦3,000,000</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Repayment Period</span>
+                                                <span class="fw-bold">Up to 2 Years</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Equipment Types</span>
+                                                <span class="fw-bold">Tractors, Harvesters</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <button class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#applyLoanModal">
+                                            <i class="bi bi-send me-1"></i> Apply Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-start mb-3">
+                                            <div>
+                                                <h5 class="mb-1">Input Credit Scheme</h5>
+                                                <p class="text-muted small">FMARD Special Program</p>
+                                            </div>
+                                            <span class="badge bg-success">0-5% Interest</span>
+                                        </div>
+                                        
+                                        <ul class="list-group list-group-flush mb-3">
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Maximum Amount</span>
+                                                <span class="fw-bold">₦500,000</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Repayment Period</span>
+                                                <span class="fw-bold">6-12 Months</span>
+                                            </li>
+                                            <li class="list-group-item px-0 d-flex justify-content-between">
+                                                <span>Input Types</span>
+                                                <span class="fw-bold">Seeds, Fertilizers</span>
+                                            </li>
+                                        </ul>
+                                        
+                                        <button class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#applyLoanModal">
+                                            <i class="bi bi-send me-1"></i> Apply Now
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apply Loan Modal -->
+    <div class="modal fade" id="applyLoanModal" tabindex="-1" aria-labelledby="applyLoanModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="applyLoanModalLabel"><i class="bi bi-cash-coin me-2 text-success"></i>Apply for New Loan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="loanApplicationForm">
+                        <div class="mb-4">
+                            <h6 class="mb-3"><i class="bi bi-list-check me-2 text-success"></i>Loan Details</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Loan Product</label>
+                                    <select class="form-select" required>
+                                        <option value="">Select loan product</option>
+                                        <option>Anchor Borrowers' Program</option>
+                                        <option>Commercial Farm Loan</option>
+                                        <option>Equipment Financing</option>
+                                        <option>Input Credit Scheme</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Amount Requested (₦)</label>
+                                    <input type="number" class="form-control" placeholder="Enter amount" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Purpose of Loan</label>
+                                    <select class="form-select" required>
+                                        <option value="">Select purpose</option>
+                                        <option>Farm Inputs Purchase</option>
+                                        <option>Equipment Acquisition</option>
+                                        <option>Farm Expansion</option>
+                                        <option>Working Capital</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Repayment Period (Months)</label>
+                                    <select class="form-select" required>
+                                        <option>6</option>
+                                        <option selected>12</option>
+                                        <option>18</option>
+                                        <option>24</option>
+                                        <option>36</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6 class="mb-3"><i class="bi bi-file-earmark-text me-2 text-success"></i>Supporting Documents</h6>
+                            <div class="alert alert-info small">
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                Upload required documents to speed up your application process
+                            </div>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="card border-dashed h-100">
+                                        <div class="card-body text-center py-4">
+                                            <i class="bi bi-file-earmark-pdf fs-1 text-muted mb-3"></i>
+                                            <h6>Farm Business Plan</h6>
+                                            <p class="small text-muted">PDF, DOCX (Max 5MB)</p>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-upload me-1"></i> Upload
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card border-dashed h-100">
+                                        <div class="card-body text-center py-4">
+                                            <i class="bi bi-file-image fs-1 text-muted mb-3"></i>
+                                            <h6>Farm Photos</h6>
+                                            <p class="small text-muted">JPG, PNG (Max 2MB each)</p>
+                                            <button class="btn btn-sm btn-outline-success">
+                                                <i class="bi bi-upload me-1"></i> Upload
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6 class="mb-3"><i class="bi bi-check-circle me-2 text-success"></i>Terms & Conditions</h6>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                <label class="form-check-label" for="agreeTerms">
+                                    I agree to the <a href="#">Terms and Conditions</a> of this loan
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="creditCheck" required>
+                                <label class="form-check-label" for="creditCheck">
+                                    I authorize a credit check and verification of my information
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" form="loanApplicationForm" class="btn btn-success">
+                        <i class="bi bi-send me-1"></i> Submit Application
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5><i class="bi bi-tree-fill me-2 text-success"></i>eFarmerID</h5>
+                    <p class="small text-muted">Nigeria's Digital Identity System for Farmers</p>
+                </div>
+                <div class="col-md-2 mb-3 mb-md-0">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-muted">Home</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Loans</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Subsidies</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6>Contact</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li><i class="bi bi-telephone me-2"></i>+234 700 555 5555</li>
+                        <li><i class="bi bi-envelope me-2"></i>support@efarmerid.ng</li>
+                        <li><i class="bi bi-geo-alt me-2"></i>FMARD, Abuja, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-5"></i></a>
+                        <div class="mt-3">
+                            <img src="https://via.placeholder.com/120x40?text=Download+App" alt="Download App" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="small text-muted mb-0">© 2023 Federal Ministry of Agriculture and Rural Development</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small text-muted mb-0">
+                        <a href="#" class="text-decoration-none text-muted">Privacy Policy</a> | 
+                        <a href="#" class="text-decoration-none text-muted">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Loan Calculator Functionality
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('calcAmount').value) || 0;
+            const duration = parseInt(document.getElementById('calcDuration').value) || 12;
+            const rate = parseFloat(document.getElementById('calcRate').value) || 0;
+            
+            const monthlyRate = rate / 100 / 12;
+            const monthlyPayment = (amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -duration));
+            const totalRepayment = monthlyPayment * duration;
+            const totalInterest = totalRepayment - amount;
+            
+            document.getElementById('monthlyPayment').textContent = '₦' + monthlyPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalInterest').textContent = '₦' + totalInterest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalRepayment').textContent = '₦' + totalRepayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        });
+        
+        // Filter Loans
+        document.querySelectorAll('[data-filter]').forEach(filter => {
+            filter.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filterValue = this.getAttribute('data-filter');
+                
+                // Update active state
+                document.querySelectorAll('[data-filter]').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Filter loans
+                document.querySelectorAll('.loan-item').forEach(loan => {
+                    if (filterValue === 'all') {
+                        loan.style.display = 'block';
+                    } else {
+                        if (loan.classList.contains(filterValue)) {
+                            loan.style.display = 'block';
+                        } else {
+                            loan.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Initialize calculator on load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('calculateBtn').click();
+        });
+    </script>
+</body>
+</html>

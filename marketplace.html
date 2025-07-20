@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Marketplace | eFarmerID Nigeria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --secondary-green: #218838;
+            --light-green: #d4edda;
+            --dark-green: #1e7e34;
+            --accent-yellow: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .product-img-container {
+            height: 180px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .product-img {
+            max-height: 100%;
+            width: auto;
+            object-fit: contain;
+        }
+        
+        .verified-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--primary-green);
+            margin-right: 10px;
+        }
+        
+        .bid-history {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .bid-item {
+            border-left: 3px solid var(--primary-green);
+            padding-left: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .auction-timer {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+        
+        .featured-product {
+            border: 2px solid var(--primary-green);
+        }
+        
+        .seller-rating i {
+            color: var(--accent-yellow);
+        }
+        
+        .location-badge {
+            background-color: rgba(0, 123, 255, 0.1);
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-tree-fill me-2"></i>eFarmerID
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="bi bi-house-door me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="myprofile.html"><i class="bi bi-person me-1"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="subsidies.html"><i class="bi bi-cash-stack me-1"></i> Subsidies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="marketplace.html"><i class="bi bi-shop me-1"></i> Marketplace</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="loans.html"><i class="bi bi-cash-coin me-1"></i> Loans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="bg-light py-4 mb-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="mb-2"><i class="bi bi-shop text-success me-2"></i>Agricultural Marketplace</h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Marketplace</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <button class="btn btn-success me-2">
+                        <i class="bi bi-plus-circle me-1"></i> Sell Product
+                    </button>
+                    <button class="btn btn-outline-success">
+                        <i class="bi bi-bell-fill me-1"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            3
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <!-- Search and Filter Section -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="input-group mb-3 mb-md-0">
+                                    <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search products...">
+                                    <button class="btn btn-success">Search</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select">
+                                    <option selected>Sort by: Default</option>
+                                    <option>Price: Low to High</option>
+                                    <option>Price: High to Low</option>
+                                    <option>Newest First</option>
+                                    <option>Most Popular</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-3">
+                        
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <button class="btn btn-outline-secondary filter-btn active" data-filter="all">
+                                <i class="bi bi-grid-fill me-1"></i> All Products
+                            </button>
+                            <button class="btn btn-outline-secondary filter-btn" data-filter="crops">
+                                <i class="bi bi-egg-fill me-1"></i> Crops
+                            </button>
+                            <button class="btn btn-outline-secondary filter-btn" data-filter="livestock">
+                                <i class="bi bi-egg-fill me-1"></i> Livestock
+                            </button>
+                            <button class="btn btn-outline-secondary filter-btn" data-filter="equipment">
+                                <i class="bi bi-tools me-1"></i> Equipment
+                            </button>
+                            <button class="btn btn-outline-secondary filter-btn" data-filter="inputs">
+                                <i class="bi bi-droplet me-1"></i> Farm Inputs
+                            </button>
+                            <button class="btn btn-outline-secondary filter-btn" data-filter="auction">
+                                <i class="bi bi-hammer me-1"></i> Auctions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Featured Products -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><i class="bi bi-star-fill text-warning me-2"></i>Featured Products</h4>
+                        <a href="#" class="btn btn-sm btn-outline-success">View All</a>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <!-- Featured Product 1 -->
+                        <div class="col-md-4">
+                            <div class="card product-card featured-product h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Premium+Maize" alt="Premium Maize" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">Premium Maize (100kg bags)</h5>
+                                        <span class="badge bg-success">Featured</span>
+                                    </div>
+                                    <p class="card-text text-muted small">High quality maize from Kaduna farms</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <span class="text-success fw-bold">₦28,000</span>
+                                            <span class="text-muted small d-block">per bag</span>
+                                        </div>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Kaduna</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                            <span class="ms-1">(24)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">Verified Seller</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Featured Product 2 -->
+                        <div class="col-md-4">
+                            <div class="card product-card featured-product h-100">
+                                <span class="badge bg-danger verified-badge">Auction</span>
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Tractor" alt="Tractor" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">John Deere Tractor</h5>
+                                        <div class="auction-timer" data-end="2023-12-15T14:00:00">
+                                            <i class="bi bi-clock me-1"></i><span class="countdown">2d 4h 32m</span>
+                                        </div>
+                                    </div>
+                                    <p class="card-text text-muted small">2018 Model, 60HP, low hours</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <span class="text-success fw-bold">₦5,200,000</span>
+                                            <span class="text-muted small d-block">Current bid</span>
+                                        </div>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Oyo</span>
+                                    </div>
+                                    
+                                    <div class="bid-history mb-2">
+                                        <div class="bid-item">
+                                            <div class="d-flex justify-content-between">
+                                                <strong>Bidder124</strong>
+                                                <span>₦5,200,000</span>
+                                            </div>
+                                            <small class="text-muted">Today, 10:45 AM</small>
+                                        </div>
+                                        <div class="bid-item">
+                                            <div class="d-flex justify-content-between">
+                                                <strong>FarmCo</strong>
+                                                <span>₦5,100,000</span>
+                                            </div>
+                                            <small class="text-muted">Today, 09:30 AM</small>
+                                        </div>
+                                        <div class="bid-item">
+                                            <div class="d-flex justify-content-between">
+                                                <strong>AgriBiz</strong>
+                                                <span>₦5,000,000</span>
+                                            </div>
+                                            <small class="text-muted">Yesterday, 4:15 PM</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Place Bid</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Featured Product 3 -->
+                        <div class="col-md-4">
+                            <div class="card product-card featured-product h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Fertilizer" alt="Fertilizer" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">NPK Fertilizer (50kg bags)</h5>
+                                        <span class="badge bg-success">Featured</span>
+                                    </div>
+                                    <p class="card-text text-muted small">High quality fertilizer, government approved</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <span class="text-success fw-bold">₦12,500</span>
+                                            <span class="text-muted small d-block">per bag (bulk discount)</span>
+                                        </div>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Kano</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <span class="ms-1">(56)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">Certified Supplier</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- All Products -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4><i class="bi bi-grid-fill text-success me-2"></i>All Products</h4>
+                        <div class="d-flex gap-2">
+                            <span class="small text-muted">1,248 products available</span>
+                            <a href="#" class="btn btn-sm btn-outline-success">Advanced Search</a>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3" id="products-container">
+                        <!-- Product 1 -->
+                        <div class="col-md-4 col-6 product-card" data-category="crops">
+                            <div class="card h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Rice" alt="Rice" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Ofada Rice (50kg)</h5>
+                                    <p class="card-text text-muted small">Premium local rice, freshly harvested</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-success fw-bold">₦32,000</span>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Ogun</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                            <span class="ms-1">(18)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">Verified</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 2 -->
+                        <div class="col-md-4 col-6 product-card" data-category="livestock">
+                            <div class="card h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Goats" alt="Goats" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Healthy Goats (5-6 months)</h5>
+                                    <p class="card-text text-muted small">West African Dwarf breed, vaccinated</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-success fw-bold">₦45,000</span>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Sokoto</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                            <i class="bi bi-star"></i>
+                                            <span class="ms-1">(7)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">Verified</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Contact Seller</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 3 -->
+                        <div class="col-md-4 col-6 product-card" data-category="equipment">
+                            <div class="card h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Irrigation" alt="Irrigation" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Drip Irrigation Kit</h5>
+                                    <p class="card-text text-muted small">Complete kit for 1 acre farm</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-success fw-bold">₦185,000</span>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Lagos</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <span class="ms-1">(42)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">Certified</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 4 -->
+                        <div class="col-md-4 col-6 product-card" data-category="inputs">
+                            <div class="card h-100">
+                                <span class="badge bg-danger verified-badge">Auction</span>
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Seeds" alt="Seeds" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h5 class="card-title mb-0">Hybrid Maize Seeds (25kg)</h5>
+                                        <div class="auction-timer" data-end="2023-12-10T18:00:00">
+                                            <i class="bi bi-clock me-1"></i><span class="countdown">1d 8h 15m</span>
+                                        </div>
+                                    </div>
+                                    <p class="card-text text-muted small">High yield variety, 95% germination rate</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <span class="text-success fw-bold">₦28,500</span>
+                                            <span class="text-muted small d-block">Current bid</span>
+                                        </div>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Plateau</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Place Bid</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 5 -->
+                        <div class="col-md-4 col-6 product-card" data-category="livestock">
+                            <div class="card h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Poultry" alt="Poultry" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Day-Old Chicks (100)</h5>
+                                    <p class="card-text text-muted small">Broiler chicks, vaccinated</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-success fw-bold">₦65,000</span>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Ondo</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                            <span class="ms-1">(31)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">Verified</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Contact Seller</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Product 6 -->
+                        <div class="col-md-4 col-6 product-card" data-category="crops">
+                            <div class="card h-100">
+                                <div class="product-img-container">
+                                    <img src="https://via.placeholder.com/300x200?text=Cassava" alt="Cassava" class="product-img">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Cassava Stems (Bundle)</h5>
+                                    <p class="card-text text-muted small">TME 419 variety, high yield</p>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="text-success fw-bold">₦3,500</span>
+                                        <span class="badge location-badge"><i class="bi bi-geo-alt me-1"></i>Benue</span>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="seller-rating small">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star"></i>
+                                            <i class="bi bi-star"></i>
+                                            <span class="ms-1">(5)</span>
+                                        </div>
+                                        <span class="badge bg-success bg-opacity-10 text-success small">New Seller</span>
+                                    </div>
+                                </div>
+                                <div class="card-footer bg-white border-0">
+                                    <button class="btn btn-sm btn-success w-100">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Products pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <!-- Categories Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-list-ul text-success me-2"></i>Categories
+                        </h5>
+                        
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item px-0 d-flex align-items-center">
+                                <div class="category-icon">
+                                    <i class="bi bi-egg-fill"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Crops</h6>
+                                    <small class="text-muted">Grains, tubers, fruits</small>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success ms-auto">328</span>
+                            </li>
+                            <li class="list-group-item px-0 d-flex align-items-center">
+                                <div class="category-icon">
+                                    <i class="bi bi-egg-fill"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Livestock</h6>
+                                    <small class="text-muted">Animals, poultry, fish</small>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success ms-auto">215</span>
+                            </li>
+                            <li class="list-group-item px-0 d-flex align-items-center">
+                                <div class="category-icon">
+                                    <i class="bi bi-tools"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Equipment</h6>
+                                    <small class="text-muted">Machinery, tools</small>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success ms-auto">178</span>
+                            </li>
+                            <li class="list-group-item px-0 d-flex align-items-center">
+                                <div class="category-icon">
+                                    <i class="bi bi-droplet"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Farm Inputs</h6>
+                                    <small class="text-muted">Seeds, fertilizers</small>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success ms-auto">412</span>
+                            </li>
+                            <li class="list-group-item px-0 d-flex align-items-center">
+                                <div class="category-icon">
+                                    <i class="bi bi-hammer"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">Auctions</h6>
+                                    <small class="text-muted">Bidding products</small>
+                                </div>
+                                <span class="badge bg-success bg-opacity-10 text-success ms-auto">115</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Price Range Filter -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-tags text-success me-2"></i>Price Range
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <label for="customRange1" class="form-label">Max Price: ₦<span id="priceValue">500,000</span></label>
+                            <input type="range" class="form-range" min="1000" max="10000000" step="1000" id="customRange1" value="500000">
+                        </div>
+                        
+                        <div class="row g-2">
+                            <div class="col">
+                                <input type="number" class="form-control" placeholder="Min" value="1000">
+                            </div>
+                            <div class="col">
+                                <input type="number" class="form-control" placeholder="Max" value="500000">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-success w-100 mt-3">Apply Filter</button>
+                    </div>
+                </div>
+                
+                <!-- Location Filter -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-geo-alt text-success me-2"></i>Location
+                        </h5>
+                        
+                        <select class="form-select mb-3">
+                            <option selected>All Nigeria</option>
+                            <option>Abia</option>
+                            <option>Adamawa</option>
+                            <option>Akwa Ibom</option>
+                            <option>Anambra</option>
+                            <option>Bauchi</option>
+                            <option>Bayelsa</option>
+                            <option>Benue</option>
+                            <option>Borno</option>
+                            <option>Cross River</option>
+                            <option>Delta</option>
+                            <option>Ebonyi</option>
+                            <option>Edo</option>
+                            <option>Ekiti</option>
+                            <option>Enugu</option>
+                            <option>Gombe</option>
+                            <option>Imo</option>
+                            <option>Jigawa</option>
+                            <option>Kaduna</option>
+                            <option>Kano</option>
+                            <option>Katsina</option>
+                            <option>Kebbi</option>
+                            <option>Kogi</option>
+                            <option>Kwara</option>
+                            <option>Lagos</option>
+                            <option>Nasarawa</option>
+                            <option>Niger</option>
+                            <option>Ogun</option>
+                            <option>Ondo</option>
+                            <option>Osun</option>
+                            <option>Oyo</option>
+                            <option>Plateau</option>
+                            <option>Rivers</option>
+                            <option>Sokoto</option>
+                            <option>Taraba</option>
+                            <option>Yobe</option>
+                            <option>Zamfara</option>
+                            <option>FCT</option>
+                        </select>
+                        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="nearbyCheck">
+                            <label class="form-check-label" for="nearbyCheck">
+                                Show only nearby products
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cart Preview -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="bi bi-cart3 text-success me-2"></i>Your Cart
+                            <span class="badge bg-success rounded-pill ms-1">3</span>
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Maize (2 bags)</span>
+                                <span>₦56,000</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Fertilizer (1 bag)</span>
+                                <span>₦12,500</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Cassava Stems</span>
+                                <span>₦3,500</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between fw-bold">
+                                <span>Total</span>
+                                <span>₦72,000</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-success w-100">
+                            <i class="bi bi-arrow-right me-1"></i> Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5><i class="bi bi-tree-fill me-2 text-success"></i>eFarmerID</h5>
+                    <p class="small text-muted">Nigeria's Digital Identity System for Farmers</p>
+                </div>
+                <div class="col-md-2 mb-3 mb-md-0">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-muted">Home</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Programs</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Marketplace</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6>Contact</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li><i class="bi bi-telephone me-2"></i>+234 700 555 5555</li>
+                        <li><i class="bi bi-envelope me-2"></i>support@efarmerid.ng</li>
+                        <li><i class="bi bi-geo-alt me-2"></i>FMARD, Abuja, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
+                    <div class="mt-3">
+                        <img src="https://via.placeholder.com/120x40?text=Download+App" alt="Download App" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="small text-muted mb-0">© 2023 Federal Ministry of Agriculture and Rural Development</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small text-muted mb-0">
+                        <a href="#" class="text-decoration-none text-muted">Privacy Policy</a> | 
+                        <a href="#" class="text-decoration-none text-muted">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter functionality
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const filter = this.getAttribute('data-filter');
+                    
+                    productCards.forEach(card => {
+                        if (filter === 'all') {
+                            card.style.display = 'block';
+                        } else {
+                            if (card.getAttribute('data-category') === filter) {
+                                card.style.display = 'block';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+            
+            // Price range slider
+            const priceSlider = document.getElementById('customRange1');
+            const priceValue = document.getElementById('priceValue');
+            
+            priceSlider.addEventListener('input', function() {
+                const value = parseInt(this.value).toLocaleString();
+                priceValue.textContent = value;
+            });
+            
+            // Auction countdown timers
+            function updateCountdowns() {
+                const countdownElements = document.querySelectorAll('.auction-timer');
+                
+                countdownElements.forEach(element => {
+                    const endTime = new Date(element.getAttribute('data-end')).getTime();
+                    const now = new Date().getTime();
+                    const distance = endTime - now;
+                    
+                    if (distance < 0) {
+                        element.innerHTML = '<i class="bi bi-clock me-1"></i>Ended';
+                        return;
+                    }
+                    
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    
+                    element.querySelector('.countdown').textContent = `${days}d ${hours}h ${minutes}m`;
+                });
+            }
+            
+            // Update countdowns every minute
+            updateCountdowns();
+            setInterval(updateCountdowns, 60000);
+            
+            console.log('Marketplace page loaded');
+        });
+    </script>
+</body>
+</html>

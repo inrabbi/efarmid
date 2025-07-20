@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | eFarmerID Nigeria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --secondary-green: #218838;
+            --light-green: #d4edda;
+            --dark-green: #1e7e34;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .registration-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .registration-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #e9ecef;
+            z-index: 1;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e9ecef;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            font-weight: 600;
+        }
+        
+        .step.active {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        
+        .step.completed {
+            background-color: var(--primary-green);
+            color: white;
+        }
+        
+        .step.completed::after {
+            content: '\2713';
+            font-size: 18px;
+        }
+        
+        .step-label {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .step.active .step-label {
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+        
+        .step.completed .step-label {
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+        }
+        
+        .btn-success {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+        
+        .btn-success:hover {
+            background-color: var(--secondary-green);
+            border-color: var(--secondary-green);
+        }
+        
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+        
+        .file-upload {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary-green);
+            background-color: rgba(40, 167, 69, 0.05);
+        }
+        
+        .file-upload input[type="file"] {
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .registration-header {
+                padding: 2rem 0;
+            }
+            
+            .registration-card {
+                margin-top: -30px;
+            }
+            
+            .step-label {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Registration Header -->
+    <div class="registration-header">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h1 class="mb-3">Create Your eFarmerID</h1>
+                    <p class="lead mb-0">Join Nigeria's digital agricultural revolution in just a few steps</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select class="form-select form-select-sm">
+            <option>English</option>
+            <option>Hausa</option>
+            <option>Yoruba</option>
+            <option>Igbo</option>
+        </select>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="container mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card registration-card">
+                    <div class="card-body p-4 p-lg-5">
+                        <!-- Step Indicator -->
+                        <div class="step-indicator mb-5">
+                            <div class="step active" data-step="1">
+                                <span class="step-number">1</span>
+                                <span class="step-label">Personal Info</span>
+                            </div>
+                            <div class="step" data-step="2">
+                                <span class="step-number">2</span>
+                                <span class="step-label">Farm Details</span>
+                            </div>
+                            <div class="step" data-step="3">
+                                <span class="step-number">3</span>
+                                <span class="step-label">Documents</span>
+                            </div>
+                            <div class="step" data-step="4">
+                                <span class="step-number">4</span>
+                                <span class="step-label">Review</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Form Sections -->
+                        <form id="registrationForm">
+                            <!-- Step 1: Personal Information -->
+                            <div class="form-section active" data-section="1">
+                                <h4 class="mb-4"><i class="bi bi-person-fill me-2 text-success"></i>Personal Information</h4>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">+234</span>
+                                            <input type="tel" class="form-control" id="phone" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email Address (Optional)</label>
+                                        <input type="email" class="form-control" id="email">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="dob" class="form-label">Date of Birth</label>
+                                        <input type="date" class="form-control" id="dob" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="gender" class="form-label">Gender</label>
+                                        <select class="form-select" id="gender" required>
+                                            <option value="">Select gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="address" class="form-label">Residential Address</label>
+                                        <input type="text" class="form-control" id="address" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="state" class="form-label">State</label>
+                                        <select class="form-select" id="state" required>
+                                            <option value="">Select state</option>
+                                            <option>Abia</option>
+                                            <option>Adamawa</option>
+                                            <option>Akwa Ibom</option>
+                                            <!-- Add all states -->
+                                            <option>Zamfara</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="lga" class="form-label">LGA</label>
+                                        <select class="form-select" id="lga" required disabled>
+                                            <option value="">Select LGA</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <div></div> <!-- Empty div for spacing -->
+                                    <button type="button" class="btn btn-success next-step" data-next="2">
+                                        Continue <i class="bi bi-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: Farm Details -->
+                            <div class="form-section" data-section="2">
+                                <h4 class="mb-4"><i class="bi bi-map-fill me-2 text-success"></i>Farm Details</h4>
+                                
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="sameAsResidential">
+                                            <label class="form-check-label" for="sameAsResidential">
+                                                Farm location is same as residential address
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="farmState" class="form-label">Farm State</label>
+                                        <select class="form-select" id="farmState" required>
+                                            <option value="">Select state</option>
+                                            <option>Abia</option>
+                                            <option>Adamawa</option>
+                                            <option>Akwa Ibom</option>
+                                            <!-- Add all states -->
+                                            <option>Zamfara</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="farmLga" class="form-label">Farm LGA</label>
+                                        <select class="form-select" id="farmLga" required disabled>
+                                            <option value="">Select LGA</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="farmAddress" class="form-label">Farm Address/Landmark</label>
+                                        <input type="text" class="form-control" id="farmAddress" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="farmSize" class="form-label">Farm Size (Hectares)</label>
+                                        <input type="number" class="form-control" id="farmSize" min="0.1" step="0.1" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="farmType" class="form-label">Primary Farm Type</label>
+                                        <select class="form-select" id="farmType" required>
+                                            <option value="">Select farm type</option>
+                                            <option>Crop Production</option>
+                                            <option>Livestock</option>
+                                            <option>Poultry</option>
+                                            <option>Fishery</option>
+                                            <option>Mixed Farming</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="mainCrops" class="form-label">Main Crops/Livestock (Select all that apply)</label>
+                                        <select class="form-select" id="mainCrops" multiple size="4" required>
+                                            <option>Maize</option>
+                                            <option>Rice</option>
+                                            <option>Cassava</option>
+                                            <option>Soybean</option>
+                                            <option>Yam</option>
+                                            <option>Vegetables</option>
+                                            <option>Cattle</option>
+                                            <option>Goats</option>
+                                            <option>Poultry</option>
+                                            <option>Fish</option>
+                                        </select>
+                                        <small class="text-muted">Hold Ctrl/Cmd to select multiple items</small>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="farmingExperience" class="form-label">Years of Farming Experience</label>
+                                        <input type="number" class="form-control" id="farmingExperience" min="0" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-outline-secondary prev-step" data-prev="1">
+                                        <i class="bi bi-arrow-left me-2"></i> Back
+                                    </button>
+                                    <button type="button" class="btn btn-success next-step" data-next="3">
+                                        Continue <i class="bi bi-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Documents -->
+                            <div class="form-section" data-section="3">
+                                <h4 class="mb-4"><i class="bi bi-file-earmark-fill me-2 text-success"></i>Document Upload</h4>
+                                <p class="text-muted mb-4">Upload required documents to complete your registration. These will be used for verification.</p>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">National ID (Front)</label>
+                                        <div class="file-upload" id="idFrontUpload">
+                                            <i class="bi bi-file-earmark-image fs-1 text-muted"></i>
+                                            <p class="mb-1">Click to upload ID front</p>
+                                            <small class="text-muted">JPG, PNG (Max 2MB)</small>
+                                            <input type="file" accept="image/*" id="idFront">
+                                            <img id="idFrontPreview" class="preview-image">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">National ID (Back)</label>
+                                        <div class="file-upload" id="idBackUpload">
+                                            <i class="bi bi-file-earmark-image fs-1 text-muted"></i>
+                                            <p class="mb-1">Click to upload ID back</p>
+                                            <small class="text-muted">JPG, PNG (Max 2MB)</small>
+                                            <input type="file" accept="image/*" id="idBack">
+                                            <img id="idBackPreview" class="preview-image">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Proof of Farm Ownership</label>
+                                        <div class="file-upload" id="farmProofUpload">
+                                            <i class="bi bi-file-earmark-pdf fs-1 text-muted"></i>
+                                            <p class="mb-1">Click to upload document</p>
+                                            <small class="text-muted">PDF, JPG, PNG (Max 5MB)</small>
+                                            <input type="file" accept=".pdf,.jpg,.png" id="farmProof">
+                                            <img id="farmProofPreview" class="preview-image">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Farmer Passport Photo</label>
+                                        <div class="file-upload" id="passportUpload">
+                                            <i class="bi bi-person-bounding-box fs-1 text-muted"></i>
+                                            <p class="mb-1">Click to upload photo</p>
+                                            <small class="text-muted">JPG, PNG (Max 2MB)</small>
+                                            <input type="file" accept="image/*" id="passportPhoto">
+                                            <img id="passportPreview" class="preview-image">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                            <label class="form-check-label" for="agreeTerms">
+                                                I certify that all documents uploaded are authentic and belong to me
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-outline-secondary prev-step" data-prev="2">
+                                        <i class="bi bi-arrow-left me-2"></i> Back
+                                    </button>
+                                    <button type="button" class="btn btn-success next-step" data-next="4">
+                                        Continue <i class="bi bi-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 4: Review and Submit -->
+                            <div class="form-section" data-section="4">
+                                <h4 class="mb-4"><i class="bi bi-check-circle-fill me-2 text-success"></i>Review Information</h4>
+                                <p class="text-muted mb-4">Please review your information before submitting. You can go back to make changes.</p>
+                                
+                                <div class="card mb-4">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Personal Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" id="reviewPersonalInfo">
+                                            <!-- Filled by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-4">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Farm Details</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" id="reviewFarmInfo">
+                                            <!-- Filled by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card mb-4">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Uploaded Documents</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row" id="reviewDocuments">
+                                            <!-- Filled by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="finalAgreement" required>
+                                    <label class="form-check-label" for="finalAgreement">
+                                        I agree to the <a href="#">Terms and Conditions</a> and <a href="#">Privacy Policy</a> of eFarmerID
+                                    </label>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                    <button type="button" class="btn btn-outline-secondary prev-step" data-prev="3">
+                                        <i class="bi bi-arrow-left me-2"></i> Back
+                                    </button>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-check-circle me-2"></i> Submit Application
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <p class="text-muted">Already have an account? <a href="login.html">Log in here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5><i class="bi bi-tree-fill me-2 text-success"></i>eFarmerID</h5>
+                    <p class="small text-muted">Nigeria's Digital Identity System for Farmers</p>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6>Contact</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li><i class="bi bi-telephone me-2"></i>+234 700 555 5555</li>
+                        <li><i class="bi bi-envelope me-2"></i>support@efarmerid.ng</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="small text-muted mb-0">© 2023 Federal Ministry of Agriculture and Rural Development</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small text-muted mb-0">
+                        <a href="#" class="text-decoration-none text-muted">Privacy Policy</a> | 
+                        <a href="#" class="text-decoration-none text-muted">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form Navigation
+        document.querySelectorAll('.next-step').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSection = document.querySelector('.form-section.active');
+                const nextSectionId = this.getAttribute('data-next');
+                const nextSection = document.querySelector(`.form-section[data-section="${nextSectionId}"]`);
+                
+                // Validate current section before proceeding
+                if (validateSection(currentSection.getAttribute('data-section'))) {
+                    currentSection.classList.remove('active');
+                    nextSection.classList.add('active');
+                    
+                    // Update step indicator
+                    document.querySelectorAll('.step').forEach(step => {
+                        step.classList.remove('active');
+                        if (parseInt(step.getAttribute('data-step')) <= parseInt(nextSectionId)) {
+                            step.classList.add('completed');
+                        }
+                    });
+                    document.querySelector(`.step[data-step="${nextSectionId}"]`).classList.add('active');
+                }
+            });
+        });
+        
+        document.querySelectorAll('.prev-step').forEach(button => {
+            button.addEventListener('click', function() {
+                const currentSection = document.querySelector('.form-section.active');
+                const prevSectionId = this.getAttribute('data-prev');
+                const prevSection = document.querySelector(`.form-section[data-section="${prevSectionId}"]`);
+                
+                currentSection.classList.remove('active');
+                prevSection.classList.add('active');
+                
+                // Update step indicator
+                document.querySelectorAll('.step').forEach(step => {
+                    step.classList.remove('active');
+                    if (parseInt(step.getAttribute('data-step')) < parseInt(prevSectionId)) {
+                        step.classList.add('completed');
+                    }
+                });
+                document.querySelector(`.step[data-step="${prevSectionId}"]`).classList.add('active');
+            });
+        });
+        
+        // Form Validation
+        function validateSection(sectionId) {
+            let isValid = true;
+            
+            if (sectionId === '1') {
+                // Validate personal information
+                const requiredFields = ['firstName', 'lastName', 'phone', 'dob', 'gender', 'address', 'state', 'lga'];
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+                
+                // Special phone validation
+                const phone = document.getElementById('phone').value;
+                if (phone && !/^\d{10}$/.test(phone)) {
+                    document.getElementById('phone').classList.add('is-invalid');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    alert('Please fill in all required fields correctly in the Personal Information section.');
+                }
+            } else if (sectionId === '2') {
+                // Validate farm details
+                const requiredFields = ['farmState', 'farmLga', 'farmAddress', 'farmSize', 'farmType', 'mainCrops', 'farmingExperience'];
+                requiredFields.forEach(fieldId => {
+                    const field = document.getElementById(fieldId);
+                    if (!field.value) {
+                        field.classList.add('is-invalid');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Please fill in all required fields in the Farm Details section.');
+                }
+            } else if (sectionId === '3') {
+                // Validate documents
+                const requiredFiles = ['idFront', 'idBack', 'farmProof', 'passportPhoto'];
+                requiredFiles.forEach(fileId => {
+                    const fileInput = document.getElementById(fileId);
+                    if (!fileInput.files || fileInput.files.length === 0) {
+                        document.getElementById(fileId + 'Upload').classList.add('border-danger');
+                        isValid = false;
+                    } else {
+                        document.getElementById(fileId + 'Upload').classList.remove('border-danger');
+                    }
+                });
+                
+                if (!document.getElementById('agreeTerms').checked) {
+                    alert('Please certify that all uploaded documents are authentic.');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    alert('Please upload all required documents and certify their authenticity.');
+                }
+            }
+            
+            return isValid;
+        }
+        
+        // State and LGA Handling
+        document.getElementById('state').addEventListener('change', function() {
+            const lgaSelect = document.getElementById('lga');
+            lgaSelect.innerHTML = '<option value="">Select LGA</option>';
+            
+            if (this.value) {
+                // In a real app, you would fetch LGAs for the selected state from an API
+                // This is a simplified example with mock data
+                const mockLgas = ['LGA 1', 'LGA 2', 'LGA 3', 'LGA 4', 'LGA 5'];
+                
+                mockLgas.forEach(lga => {
+                    const option = document.createElement('option');
+                    option.value = lga;
+                    option.textContent = lga;
+                    lgaSelect.appendChild(option);
+                });
+                
+                lgaSelect.disabled = false;
+            } else {
+                lgaSelect.disabled = true;
+            }
+        });
+        
+        document.getElementById('farmState').addEventListener('change', function() {
+            const farmLgaSelect = document.getElementById('farmLga');
+            farmLgaSelect.innerHTML = '<option value="">Select LGA</option>';
+            
+            if (this.value) {
+                // In a real app, you would fetch LGAs for the selected state from an API
+                // This is a simplified example with mock data
+                const mockLgas = ['LGA A', 'LGA B', 'LGA C', 'LGA D', 'LGA E'];
+                
+                mockLgas.forEach(lga => {
+                    const option = document.createElement('option');
+                    option.value = lga;
+                    option.textContent = lga;
+                    farmLgaSelect.appendChild(option);
+                });
+                
+                farmLgaSelect.disabled = false;
+            } else {
+                farmLgaSelect.disabled = true;
+            }
+        });
+        
+        // Same as residential address toggle
+        document.getElementById('sameAsResidential').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('farmState').value = document.getElementById('state').value;
+                document.getElementById('farmState').dispatchEvent(new Event('change'));
+                
+                // Simulate LGA selection after a small delay to allow LGAs to load
+                setTimeout(() => {
+                    document.getElementById('farmLga').value = document.getElementById('lga').value;
+                }, 100);
+                
+                document.getElementById('farmAddress').value = document.getElementById('address').value;
+                
+                // Disable farm address fields
+                document.getElementById('farmState').disabled = true;
+                document.getElementById('farmLga').disabled = true;
+                document.getElementById('farmAddress').disabled = true;
+            } else {
+                // Enable farm address fields
+                document.getElementById('farmState').disabled = false;
+                document.getElementById('farmLga').disabled = false;
+                document.getElementById('farmAddress').disabled = false;
+            }
+        });
+        
+        // File Upload Previews
+        document.getElementById('idFront').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('idFrontPreview').src = event.target.result;
+                    document.getElementById('idFrontPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        document.getElementById('idBack').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('idBackPreview').src = event.target.result;
+                    document.getElementById('idBackPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        document.getElementById('farmProof').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.type === 'application/pdf') {
+                    // For PDFs, we can't preview directly in an img tag
+                    document.getElementById('farmProofPreview').style.display = 'none';
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('farmProofPreview').src = event.target.result;
+                        document.getElementById('farmProofPreview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+        
+        document.getElementById('passportPhoto').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('passportPreview').src = event.target.result;
+                    document.getElementById('passportPreview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Click on file-upload div triggers file input
+        document.querySelectorAll('.file-upload').forEach(uploadDiv => {
+            uploadDiv.addEventListener('click', function() {
+                const fileInput = this.querySelector('input[type="file"]');
+                fileInput.click();
+            });
+        });
+        
+        // Form Submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!document.getElementById('finalAgreement').checked) {
+                alert('Please agree to the Terms and Conditions and Privacy Policy before submitting.');
+                return;
+            }
+            
+            // In a real application, you would send the form data to your backend here
+            // For this example, we'll just show a success message
+            
+            // Prepare review data
+            prepareReviewData();
+            
+            // Show success message (in a real app, you would redirect or show a proper success page)
+            alert('Registration submitted successfully! You will receive a confirmation message shortly.');
+            
+            // Reset form (optional)
+            // this.reset();
+            
+            // Redirect to login page (optional)
+            // window.location.href = 'login.html';
+        });
+        
+        // Prepare review data for the final step
+        function prepareReviewData() {
+            // Personal Info
+            const personalInfoFields = [
+                { label: 'Full Name', value: `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}` },
+                { label: 'Phone Number', value: `+234${document.getElementById('phone').value}` },
+                { label: 'Email', value: document.getElementById('email').value || 'Not provided' },
+                { label: 'Date of Birth', value: document.getElementById('dob').value },
+                { label: 'Gender', value: document.getElementById('gender').value },
+                { label: 'Address', value: document.getElementById('address').value },
+                { label: 'State/LGA', value: `${document.getElementById('state').value}/${document.getElementById('lga').value}` }
+            ];
+            
+            let personalInfoHtml = '';
+            personalInfoFields.forEach(field => {
+                personalInfoHtml += `
+                    <div class="col-md-6 mb-2">
+                        <div class="small text-muted">${field.label}</div>
+                        <div class="fw-bold">${field.value}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('reviewPersonalInfo').innerHTML = personalInfoHtml;
+            
+            // Farm Info
+            const farmInfoFields = [
+                { label: 'Farm State/LGA', value: `${document.getElementById('farmState').value}/${document.getElementById('farmLga').value}` },
+                { label: 'Farm Address', value: document.getElementById('farmAddress').value },
+                { label: 'Farm Size', value: `${document.getElementById('farmSize').value} hectares` },
+                { label: 'Farm Type', value: document.getElementById('farmType').value },
+                { label: 'Main Crops/Livestock', value: Array.from(document.getElementById('mainCrops').selectedOptions).map(opt => opt.value).join(', ') },
+                { label: 'Farming Experience', value: `${document.getElementById('farmingExperience').value} years` }
+            ];
+            
+            let farmInfoHtml = '';
+            farmInfoFields.forEach(field => {
+                farmInfoHtml += `
+                    <div class="col-md-6 mb-2">
+                        <div class="small text-muted">${field.label}</div>
+                        <div class="fw-bold">${field.value}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('reviewFarmInfo').innerHTML = farmInfoHtml;
+            
+            // Documents
+            const documentFields = [
+                { label: 'ID Front', id: 'idFront' },
+                { label: 'ID Back', id: 'idBack' },
+                { label: 'Farm Proof', id: 'farmProof' },
+                { label: 'Passport Photo', id: 'passportPhoto' }
+            ];
+            
+            let documentsHtml = '';
+            documentFields.forEach(field => {
+                const fileInput = document.getElementById(field.id);
+                const fileName = fileInput.files[0] ? fileInput.files[0].name : 'Not uploaded';
+                
+                documentsHtml += `
+                    <div class="col-md-6 mb-2">
+                        <div class="small text-muted">${field.label}</div>
+                        <div class="fw-bold">${fileName}</div>
+                    </div>
+                `;
+            });
+            document.getElementById('reviewDocuments').innerHTML = documentsHtml;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eFarmerID Verification System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        .biometric-btn {
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .verification-card {
+            transition: all 0.3s;
+        }
+        .verification-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .offline-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        #map {
+            height: 300px;
+            background-color: #eee;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Agent Mobile App -->
+    <div class="container py-5 d-lg-none">
+        <!-- Login Screen -->
+        <div class="row justify-content-center" id="loginScreen">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body text-center p-5">
+                        <h4 class="mb-4">
+                            <i class="bi bi-tree-fill text-success"></i> eFarmerID Agent
+                        </h4>
+                        <div class="mb-3">
+                            <input type="tel" class="form-control" placeholder="Phone Number">
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" class="form-control" placeholder="PIN">
+                        </div>
+                        <div class="form-check mb-3 text-start">
+                            <input class="form-check-input" type="checkbox" id="offlineMode">
+                            <label class="form-check-label" for="offlineMode">Work offline</label>
+                        </div>
+                        <button class="btn btn-success w-100" onclick="showScreen('homeScreen')">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div class="row justify-content-center d-none" id="homeScreen">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">Welcome, Agent John</h5>
+                    <span class="badge bg-success">Online</span>
+                </div>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <button class="btn btn-primary w-100 py-3" onclick="showScreen('verificationScreen')">
+                            <i class="bi bi-person-plus fs-4 d-block mb-2"></i>
+                            New Verification
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-warning w-100 py-3">
+                            <i class="bi bi-cloud-arrow-up fs-4 d-block mb-2"></i>
+                            Pending Sync (3)
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Today's Progress</h6>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="fs-4">12</span>/50 verifications
+                            </div>
+                            <div class="progress" style="width: 70%; height: 20px">
+                                <div class="progress-bar" style="width: 24%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Recent Activity</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Amina B.</span>
+                                <small class="text-muted">10 mins ago</small>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Yusuf M.</span>
+                                <small class="text-muted">25 mins ago</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verification Screen -->
+        <div class="row justify-content-center d-none" id="verificationScreen">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>New Verification</h5>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="showScreen('homeScreen')">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </button>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Farmer ID/USSD Code</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="123456">
+                                <button class="btn btn-outline-secondary" type="button">
+                                    <i class="bi bi-qr-code-scan"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="btn btn-success w-100" onclick="showScreen('biometricScreen')">
+                            Search Farmer
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Quick Help</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <i class="bi bi-info-circle text-primary me-2"></i>
+                                Ask farmer for their USSD reference number
+                            </li>
+                            <li class="list-group-item">
+                                <i class="bi bi-phone text-primary me-2"></i>
+                                Dial *123# to check ID if unsure
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Biometric Screen -->
+        <div class="row justify-content-center d-none" id="biometricScreen">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Verify Farmer: Adeola Musa</h5>
+                    <span class="badge bg-primary">ID: 7890</span>
+                </div>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary biometric-btn w-100">
+                            <i class="bi bi-fingerprint fs-1 mb-2"></i>
+                            Fingerprint
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <button class="btn btn-outline-primary biometric-btn w-100">
+                            <i class="bi bi-camera-fill fs-1 mb-2"></i>
+                            Facial Scan
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Document Upload</h6>
+                        <button class="btn btn-outline-secondary w-100 mb-2">
+                            <i class="bi bi-upload me-2"></i> NIN/BVN
+                        </button>
+                        <button class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-upload me-2"></i> Farm Proof
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success" onclick="showScreen('confirmationScreen')">
+                        <i class="bi bi-check-circle me-2"></i> Complete Verification
+                    </button>
+                    <button class="btn btn-outline-danger">
+                        <i class="bi bi-x-circle me-2"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Confirmation Screen -->
+        <div class="row justify-content-center d-none" id="confirmationScreen">
+            <div class="col-12">
+                <div class="text-center py-4">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4>Verification Successful!</h4>
+                    <p class="text-muted">SMS has been sent to the farmer</p>
+                    
+                    <div class="card mb-4">
+                        <div class="card-body text-start">
+                            <p class="mb-1"><strong>Name:</strong> Adeola Musa</p>
+                            <p class="mb-1"><strong>eFarmerID:</strong> EFN78901234</p>
+                            <p class="mb-1"><strong>Location:</strong> Kaduna LGA</p>
+                            <p class="mb-0"><strong>Date:</strong> 12 Jun 2023</p>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-outline-primary mb-2 w-100">
+                        <i class="bi bi-printer me-2"></i> Print Receipt
+                    </button>
+                    <button class="btn btn-success w-100" onclick="showScreen('homeScreen')">
+                        <i class="bi bi-house me-2"></i> Return Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard (Desktop) -->
+    <div class="container-fluid py-3 d-none d-lg-block">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-2 bg-dark text-white vh-100 sticky-top">
+                <div class="p-3">
+                    <h4 class="text-white">
+                        <i class="bi bi-tree-fill text-success me-2"></i> eFarmerID
+                    </h4>
+                    <hr class="bg-secondary">
+                    
+                    <ul class="nav nav-pills flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-people me-2"></i> Agents
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-person-check me-2"></i> Verifications
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-flag me-2"></i> Fraud Alerts
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-map me-2"></i> Coverage
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-10 py-3">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3>Dashboard Overview</h3>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-calendar me-2"></i> Last 30 Days
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
+                            <li><a class="dropdown-item" href="#">Last 30 Days</a></li>
+                            <li><a class="dropdown-item" href="#">Last Quarter</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-3">
+                        <div class="card border-primary">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Farmers Verified</h6>
+                                <h3 class="card-title">10,392</h3>
+                                <span class="badge bg-primary">+12% from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-success">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Active Agents</h6>
+                                <h3 class="card-title">142</h3>
+                                <span class="badge bg-success">86% active today</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-warning">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Pending Sync</h6>
+                                <h3 class="card-title">327</h3>
+                                <span class="badge bg-warning text-dark">Offline verifications</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card border-danger">
+                            <div class="card-body">
+                                <h6 class="card-subtitle mb-2 text-muted">Fraud Alerts</h6>
+                                <h3 class="card-title">4</h3>
+                                <span class="badge bg-danger">Require review</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Map and Recent Activity -->
+                <div class="row g-4 mb-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Verification Coverage</h5>
+                                <div id="map"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Recent Alerts</h5>
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>Duplicate Biometrics</strong>
+                                            <small>1 hour ago</small>
+                                        </div>
+                                        <small>Agent: John (Kaduna)</small>
+                                    </a>
+                                    <a href="#" class="list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between">
+                                            <strong>Low-Quality Photo</strong>
+                                            <small>3 hours ago</small>
+                                        </div>
+                                        <small>Agent: Amina (Oyo)</small>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Agents Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Agent Management</h5>
+                            <button class="btn btn-sm btn-success">
+                                <i class="bi bi-plus"></i> Add Agent
+                            </button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>LGAs Covered</th>
+                                        <th>Verifications</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Amina Yusuf</td>
+                                        <td>Kaduna, Zaria</td>
+                                        <td>128</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>John Okafor</td>
+                                        <td>Oyo East</td>
+                                        <td>92</td>
+                                        <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple screen navigation for mobile demo
+        function showScreen(screenId) {
+            document.querySelectorAll('.row.justify-content-center').forEach(el => {
+                el.classList.add('d-none');
+            });
+            document.getElementById(screenId).classList.remove('d-none');
+        }
+        
+        // Initialize with login screen
+        document.addEventListener('DOMContentLoaded', function() {
+            showScreen('loginScreen');
+            
+            // Simulate map (in a real app, use Leaflet/Google Maps)
+            const map = document.getElementById('map');
+            if(map) {
+                map.innerHTML = `
+                    <div class="d-flex align-items-center justify-content-center h-100 text-muted">
+                        <div class="text-center">
+                            <i class="bi bi-map fs-1"></i>
+                            <p class="mt-2">Verification heatmap would display here</p>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

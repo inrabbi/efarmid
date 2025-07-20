@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | eFarmerID Nigeria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --secondary-green: #218838;
+            --light-green: #d4edda;
+            --dark-green: #1e7e34;
+            --accent-yellow: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .avatar-xxl {
+            width: 120px;
+            height: 120px;
+            border: 4px solid white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-green);
+        }
+        
+        .stat-card {
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .progress-thin {
+            height: 6px;
+        }
+        
+        .document-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .document-card:hover {
+            border-color: var(--primary-green);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .verification-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        
+        .edit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .profile-section:hover .edit-btn {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .avatar-xxl {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-tree-fill me-2"></i>eFarmerID
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html"><i class="bi bi-house-door me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="myprofile.html"><i class="bi bi-person me-1"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="subsidies.html"><i class="bi bi-cash-stack me-1"></i> Subsidies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="marketplace.html"><i class="bi bi-shop me-1"></i> Marketplace</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link " href="loans.html"><i class="bi bi-cash-coin me-1"></i> Loans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                    <img src="https://via.placeholder.com/150?text=Farmer" alt="Profile Photo" class="avatar-xxl rounded-circle">
+                </div>
+                <div class="col-md-7 text-center text-md-start">
+                    <h2 class="mb-1">Musa Bello</h2>
+                    <p class="mb-2">FID-NG-987654</p>
+                    <div class="d-flex flex-wrap justify-content-center justify-content-md-start gap-2">
+                        <span class="badge bg-white text-success"><i class="bi bi-check-circle-fill me-1"></i>Verified Farmer</span>
+                        <span class="badge bg-white text-dark"><i class="bi bi-geo-alt-fill me-1"></i>Kaduna State</span>
+                        <span class="badge bg-white text-primary"><i class="bi bi-star-fill me-1"></i>Premium Member</span>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center text-md-end mt-3 mt-md-0">
+                    <button class="btn btn-light me-2"><i class="bi bi-printer me-1"></i> Print ID</button>
+                    <button class="btn btn-outline-light"><i class="bi bi-share me-1"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="row">
+            <!-- Left Sidebar -->
+            <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <ul class="nav nav-pills flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#personal-info" data-bs-toggle="pill">
+                                    <i class="bi bi-person-lines-fill me-2"></i> Personal Info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#farm-details" data-bs-toggle="pill">
+                                    <i class="bi bi-map-fill me-2"></i> Farm Details
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#documents" data-bs-toggle="pill">
+                                    <i class="bi bi-file-earmark-text-fill me-2"></i> Documents
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#verification" data-bs-toggle="pill">
+                                    <i class="bi bi-shield-check me-2"></i> Verification
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#settings" data-bs-toggle="pill">
+                                    <i class="bi bi-gear-fill me-2"></i> Settings
+                                </a>
+                            </li>
+                        </ul>
+                        
+                        <hr class="my-3">
+                        
+                        <div class="text-center">
+                            <div class="mb-3">
+                                <div class="fw-bold mb-1">Profile Completion</div>
+                                <div class="progress progress-thin">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 85%"></div>
+                                </div>
+                                <small class="text-muted">85% complete</small>
+                            </div>
+                            <button class="btn btn-success btn-sm w-100">
+                                <i class="bi bi-arrow-up-circle me-1"></i> Upgrade Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card shadow-sm mt-3">
+                    <div class="card-body">
+                        <h6 class="card-title mb-3"><i class="bi bi-info-circle-fill me-2 text-primary"></i>Quick Stats</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span><i class="bi bi-calendar-check me-2 text-success"></i>Member Since</span>
+                                <span>Oct 2022</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span><i class="bi bi-cash-coin me-2 text-success"></i>Total Loans</span>
+                                <span>₦450,000</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span><i class="bi bi-basket me-2 text-success"></i>Total Yield</span>
+                                <span>8.7 Tons</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                <span><i class="bi bi-check-circle me-2 text-success"></i>Verified</span>
+                                <span>5/7 Items</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-lg-9">
+                <div class="tab-content">
+                    <!-- Personal Info Tab -->
+                    <div class="tab-pane fade show active" id="personal-info">
+                        <div class="card shadow-sm mb-4 profile-section position-relative">
+                            <button class="btn btn-sm btn-outline-secondary edit-btn">
+                                <i class="bi bi-pencil-fill"></i> Edit
+                            </button>
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-person-badge-fill me-2 text-success"></i>Personal Information
+                                </h5>
+                                
+                                <div class="row mb-4">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Full Name</label>
+                                        <p class="fw-bold">Musa Bello</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Gender</label>
+                                        <p class="fw-bold">Male</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Date of Birth</label>
+                                        <p class="fw-bold">15 June 1985</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Phone Number</label>
+                                        <p class="fw-bold">+234 801 234 5678</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Email Address</label>
+                                        <p class="fw-bold">musa.bello@example.com</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Nationality</label>
+                                        <p class="fw-bold">Nigerian</p>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="mb-3"><i class="bi bi-house-door-fill me-2 text-success"></i>Contact Address</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">State</label>
+                                        <p class="fw-bold">Kaduna</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">LGA</label>
+                                        <p class="fw-bold">Igabi</p>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label text-muted">Full Address</label>
+                                        <p class="fw-bold">No. 12 Farm Road, Igabi LGA, Kaduna State</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card shadow-sm mb-4 profile-section position-relative">
+                            <button class="btn btn-sm btn-outline-secondary edit-btn">
+                                <i class="bi bi-pencil-fill"></i> Edit
+                            </button>
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-bank2 me-2 text-success"></i>Bank Account Details
+                                </h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Bank Name</label>
+                                        <p class="fw-bold">First Bank of Nigeria</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Account Number</label>
+                                        <p class="fw-bold">3045678901</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">Account Name</label>
+                                        <p class="fw-bold">Musa Bello</p>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label text-muted">BVN</label>
+                                        <p class="fw-bold">22234567890 <span class="badge bg-success ms-2">Verified</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Farm Details Tab -->
+                    <div class="tab-pane fade" id="farm-details">
+                        <div class="card shadow-sm mb-4 profile-section position-relative">
+                            <button class="btn btn-sm btn-outline-secondary edit-btn">
+                                <i class="bi bi-pencil-fill"></i> Edit
+                            </button>
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-map-fill me-2 text-success"></i>Farm Locations
+                                </h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="card stat-card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div>
+                                                        <h6 class="mb-1">Main Farm</h6>
+                                                        <span class="text-muted small">Igabi LGA, Kaduna</span>
+                                                    </div>
+                                                    <span class="badge bg-success">Active</span>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <img src="https://via.placeholder.com/300x150?text=Farm+Location" class="img-fluid rounded" alt="Farm Location">
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span>Size</span>
+                                                        <span class="fw-bold">2.5 hectares</span>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span>Primary Crop</span>
+                                                        <span class="fw-bold">Maize</span>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span>Soil Type</span>
+                                                        <span class="fw-bold">Loamy</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6 mb-4">
+                                        <div class="card stat-card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                                    <div>
+                                                        <h6 class="mb-1">Secondary Farm</h6>
+                                                        <span class="text-muted small">Igabi LGA, Kaduna</span>
+                                                    </div>
+                                                    <span class="badge bg-success">Active</span>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <img src="https://via.placeholder.com/300x150?text=Farm+Location" class="img-fluid rounded" alt="Farm Location">
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span>Size</span>
+                                                        <span class="fw-bold">1.8 hectares</span>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span>Primary Crop</span>
+                                                        <span class="fw-bold">Soybean</span>
+                                                    </li>
+                                                    <li class="list-group-item px-0 d-flex justify-content-between">
+                                                        <span>Soil Type</span>
+                                                        <span class="fw-bold">Sandy Loam</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-success">
+                                    <i class="bi bi-plus-circle me-1"></i> Add New Farm
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-bar-chart-fill me-2 text-success"></i>Current Season Crops
+                                </h5>
+                                
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Crop</th>
+                                                <th>Farm</th>
+                                                <th>Area</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://via.placeholder.com/40x40?text=Maize" class="rounded me-2" width="30">
+                                                        <span>Maize</span>
+                                                    </div>
+                                                </td>
+                                                <td>Main Farm</td>
+                                                <td>2.5 ha</td>
+                                                <td>
+                                                    <span class="badge bg-success">Growing</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://via.placeholder.com/40x40?text=Soybean" class="rounded me-2" width="30">
+                                                        <span>Soybean</span>
+                                                    </div>
+                                                </td>
+                                                <td>Secondary Farm</td>
+                                                <td>1.8 ha</td>
+                                                <td>
+                                                    <span class="badge bg-success">Growing</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="https://via.placeholder.com/40x40?text=Cassava" class="rounded me-2" width="30">
+                                                        <span>Cassava</span>
+                                                    </div>
+                                                </td>
+                                                <td>Main Farm</td>
+                                                <td>0.5 ha</td>
+                                                <td>
+                                                    <span class="badge bg-warning text-dark">Planted</span>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary">View</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Documents Tab -->
+                    <div class="tab-pane fade" id="documents">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-file-earmark-text-fill me-2 text-success"></i>My Documents
+                                </h5>
+                                
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                    Uploaded documents help verify your identity and improve access to government programs.
+                                </div>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="card document-card h-100 position-relative">
+                                            <span class="badge bg-success verification-badge">Verified</span>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-start mb-3">
+                                                    <div class="bg-success bg-opacity-10 p-3 rounded me-3">
+                                                        <i class="bi bi-file-text-fill text-success fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-1">National ID Card</h6>
+                                                        <p class="text-muted small mb-2">Front and back copies</p>
+                                                        <span class="badge bg-success bg-opacity-10 text-success">Verified</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <small class="text-muted">Uploaded: 15 Oct 2022</small>
+                                                    <div>
+                                                        <button class="btn btn-sm btn-outline-secondary me-1">
+                                                            <i class="bi bi-download"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-danger">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="card document-card h-100 position-relative">
+                                            <span class="badge bg-success verification-badge">Verified</span>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-start mb-3">
+                                                    <div class="bg-success bg-opacity-10 p-3 rounded me-3">
+                                                        <i class="bi bi-file-text-fill text-success fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-1">Proof of Farm Ownership</h6>
+                                                        <p class="text-muted small mb-2">Land deed or agreement</p>
+                                                        <span class="badge bg-success bg-opacity-10 text-success">Verified</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <small class="text-muted">Uploaded: 20 Oct 2022</small>
+                                                    <div>
+                                                        <button class="btn btn-sm btn-outline-secondary me-1">
+                                                            <i class="bi bi-download"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-danger">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="card document-card h-100 position-relative">
+                                            <span class="badge bg-warning verification-badge">Pending</span>
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-start mb-3">
+                                                    <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                                                        <i class="bi bi-file-text-fill text-warning fs-4"></i>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-1">Tax Identification</h6>
+                                                        <p class="text-muted small mb-2">TIN certificate</p>
+                                                        <span class="badge bg-warning bg-opacity-10 text-warning">Pending Review</span>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <small class="text-muted">Uploaded: 5 Nov 2022</small>
+                                                    <div>
+                                                        <button class="btn btn-sm btn-outline-secondary me-1">
+                                                            <i class="bi bi-download"></i>
+                                                        </button>
+                                                        <button class="btn btn-sm btn-outline-danger">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="card document-card h-100">
+                                            <div class="card-body text-center py-5">
+                                                <i class="bi bi-cloud-arrow-up fs-1 text-muted mb-3"></i>
+                                                <h5>Upload New Document</h5>
+                                                <p class="text-muted small">Supported formats: PDF, JPG, PNG</p>
+                                                <button class="btn btn-success">
+                                                    <i class="bi bi-upload me-1"></i> Select Files
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Verification Tab -->
+                    <div class="tab-pane fade" id="verification">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-shield-check me-2 text-success"></i>Verification Status
+                                </h5>
+                                
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">Verification Progress</span>
+                                        <span>5 of 7 verified</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 71%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="list-group">
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                <span>Phone Number Verified</span>
+                                            </div>
+                                            <small class="text-muted">Verified: 10 Oct 2022</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                <span>BVN Verified</span>
+                                            </div>
+                                            <small class="text-muted">Verified: 12 Oct 2022</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                <span>National ID Verified</span>
+                                            </div>
+                                            <small class="text-muted">Verified: 15 Oct 2022</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                <span>Farm Ownership Verified</span>
+                                            </div>
+                                            <small class="text-muted">Verified: 20 Oct 2022</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                                <span>Bank Account Verified</span>
+                                            </div>
+                                            <small class="text-muted">Verified: 22 Oct 2022</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-hourglass-split text-warning me-2"></i>
+                                                <span>Tax ID Verification</span>
+                                            </div>
+                                            <small class="text-muted">Pending review</small>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <i class="bi bi-x-circle-fill text-danger me-2"></i>
+                                                <span>Biometric Verification</span>
+                                            </div>
+                                            <button class="btn btn-sm btn-success">Complete Now</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-warning mt-4">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    Complete all verifications to access full benefits including higher loan limits and premium subsidies.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings Tab -->
+                    <div class="tab-pane fade" id="settings">
+                        <div class="card shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-4">
+                                    <i class="bi bi-gear-fill me-2 text-success"></i>Account Settings
+                                </h5>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <h6 class="mb-3"><i class="bi bi-shield-lock me-2 text-success"></i>Security Settings</h6>
+                                                
+                                                <div class="mb-3">
+                                                    <label class="form-label">Change Password</label>
+                                                    <input type="password" class="form-control mb-2" placeholder="Current Password">
+                                                    <input type="password" class="form-control mb-2" placeholder="New Password">
+                                                    <input type="password" class="form-control" placeholder="Confirm New Password">
+                                                    <button class="btn btn-success mt-2">Update Password</button>
+                                                </div>
+                                                
+                                                <div class="form-check form-switch mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="twoFactorAuth" checked>
+                                                    <label class="form-check-label" for="twoFactorAuth">Two-Factor Authentication</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <div class="card mb-4">
+                                            <div class="card-body">
+                                                <h6 class="mb-3"><i class="bi bi-bell-fill me-2 text-success"></i>Notification Preferences</h6>
+                                                
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="smsNotifications" checked>
+                                                    <label class="form-check-label" for="smsNotifications">SMS Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
+                                                    <label class="form-check-label" for="emailNotifications">Email Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="appNotifications" checked>
+                                                    <label class="form-check-label" for="appNotifications">In-App Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input" type="checkbox" id="marketUpdates">
+                                                    <label class="form-check-label" for="marketUpdates">Market Price Updates</label>
+                                                </div>
+                                                
+                                                <button class="btn btn-success">Save Preferences</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card border-danger">
+                                    <div class="card-body">
+                                        <h6 class="mb-3 text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Danger Zone</h6>
+                                        <p class="small text-muted">These actions are irreversible. Please proceed with caution.</p>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center mt-3">
+                                            <div>
+                                                <h6 class="mb-1">Deactivate Account</h6>
+                                                <p class="small text-muted mb-0">Temporarily disable your account</p>
+                                            </div>
+                                            <button class="btn btn-outline-danger">Deactivate</button>
+                                        </div>
+                                        
+                                        <hr>
+                                        
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">Delete Account</h6>
+                                                <p class="small text-muted mb-0">Permanently remove your account and data</p>
+                                            </div>
+                                            <button class="btn btn-danger">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5><i class="bi bi-tree-fill me-2 text-success"></i>eFarmerID</h5>
+                    <p class="small text-muted">Nigeria's Digital Identity System for Farmers</p>
+                </div>
+                <div class="col-md-2 mb-3 mb-md-0">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-decoration-none text-muted">Home</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Programs</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Marketplace</a></li>
+                        <li><a href="#" class="text-decoration-none text-muted">Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-3 mb-md-0">
+                    <h6>Contact</h6>
+                    <ul class="list-unstyled small text-muted">
+                        <li><i class="bi bi-telephone me-2"></i>+234 700 555 5555</li>
+                        <li><i class="bi bi-envelope me-2"></i>support@efarmerid.ng</li>
+                        <li><i class="bi bi-geo-alt me-2"></i>FMARD, Abuja, Nigeria</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6>Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-twitter fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
+                    <div class="mt-3">
+                        <img src="https://via.placeholder.com/120x40?text=Download+App" alt="Download App" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+            <hr class="my-3">
+            <div class="row">
+                <div class="col-md-6 mb-2 mb-md-0">
+                    <p class="small text-muted mb-0">© 2023 Federal Ministry of Agriculture and Rural Development</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="small text-muted mb-0">
+                        <a href="#" class="text-decoration-none text-muted">Privacy Policy</a> | 
+                        <a href="#" class="text-decoration-none text-muted">Terms of Service</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simulate loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // In a real app, you would load data from APIs here
+            console.log('Profile page loaded');
+            
+            // Example: Show a toast notification when coming from another page
+            if (window.location.search.includes('from=login')) {
+                const toast = new bootstrap.Toast(document.getElementById('welcomeToast'));
+                toast.show();
+            }
+        });
+    </script>
+</body>
+</html>
