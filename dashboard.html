@@ -336,19 +336,19 @@
                                 <h5 class="card-title mb-3"><i class="bi bi-lightning-charge-fill text-success me-2"></i>Quick Actions</h5>
                                 
                                 <div class="d-grid gap-2">
-                                    <button class="btn btn-outline-success text-start">
+                                    <button class="btn btn-outline-success text-start" data-bs-toggle="modal" data-bs-target="#addFarmModal">
                                         <i class="bi bi-plus-circle me-2"></i> Add Farm Record
                                     </button>
-                                    <button class="btn btn-outline-success text-start">
+                                    <button class="btn btn-outline-success text-start" data-bs-toggle="modal" data-bs-target="#subsidyModal">
                                         <i class="bi bi-cash-stack me-2"></i> Apply for Subsidy
                                     </button>
-                                    <button class="btn btn-outline-success text-start">
+                                    <button class="btn btn-outline-success text-start"data-bs-toggle="modal" data-bs-target="#sellProductModal">
                                         <i class="bi bi-shop me-2"></i> Sell Products
                                     </button>
-                                    <button class="btn btn-outline-success text-start">
+                                    <button class="btn btn-outline-success text-start" data-bs-toggle="modal" data-bs-target="#scheduleModal">
                                         <i class="bi bi-calendar-check me-2"></i> Schedule Activity
                                     </button>
-                                    <button class="btn btn-outline-success text-start">
+                                    <button class="btn btn-outline-success text-start" data-bs-toggle="modal" data-bs-target="#extensionOfficerModal">
                                         <i class="bi bi-file-earmark-text me-2"></i> Generate Report
                                     </button>
                                 </div>
@@ -356,6 +356,590 @@
                         </div>
                     </div>
                 </div>
+
+
+                <!-- Add Farm Record Modal -->
+<div class="modal fade" id="addFarmModal" tabindex="-1" aria-labelledby="addFarmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="addFarmModalLabel"><i class="bi bi-plus-circle me-2"></i>Add New Farm Record</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="farmRecordForm">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="farmName" class="form-label">Farm Name</label>
+                            <input type="text" class="form-control" id="farmName" placeholder="e.g., Maize Field A" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="farmSize" class="form-label">Farm Size</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="farmSize" placeholder="0.0" step="0.1" required>
+                                <span class="input-group-text">hectares</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="farmLocation" class="form-label">Location</label>
+                            <select class="form-select" id="farmLocation" required>
+                                <option value="" selected disabled>Select Location</option>
+                                <option>Kaduna North</option>
+                                <option>Kaduna South</option>
+                                <option>Zaria</option>
+                                <option>Kafanchan</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="soilType" class="form-label">Soil Type</label>
+                            <select class="form-select" id="soilType" required>
+                                <option value="" selected disabled>Select Soil Type</option>
+                                <option>Loamy</option>
+                                <option>Sandy</option>
+                                <option>Clay</option>
+                                <option>Silty</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="farmCoordinates" class="form-label">Farm Coordinates</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="farmCoordinates" placeholder="Latitude, Longitude">
+                                <button class="btn btn-outline-success" type="button" id="getLocationBtn">
+                                    <i class="bi bi-geo-alt"></i> Get Current Location
+                                </button>
+                            </div>
+                            <small class="text-muted">Click the button to automatically detect your farm location</small>
+                        </div>
+                        <div class="col-12">
+                            <label for="farmPhoto" class="form-label">Farm Photo</label>
+                            <input class="form-control" type="file" id="farmPhoto" accept="image/*">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="irrigationCheck">
+                                <label class="form-check-label" for="irrigationCheck">
+                                    This farm has irrigation facilities
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="farmRecordForm" class="btn btn-success">
+                    <i class="bi bi-save me-1"></i> Save Farm Record
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Apply for Subsidy Modal -->
+<div class="modal fade" id="subsidyModal" tabindex="-1" aria-labelledby="subsidyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="subsidyModalLabel"><i class="bi bi-cash-stack me-2"></i>Apply for Agricultural Subsidy</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i> Based on your profile, we've found 3 subsidy programs you may qualify for.
+                </div>
+                
+                <form id="subsidyForm">
+                    <div class="mb-4">
+                        <label class="form-label">Select Subsidy Program</label>
+                        <div class="list-group">
+                            <label class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="subsidyProgram" id="anchorBorrowers" checked>
+                                        <label class="form-check-label fw-bold" for="anchorBorrowers">
+                                            Anchor Borrowers' Program
+                                        </label>
+                                    </div>
+                                    <span class="badge bg-success">Best Match</span>
+                                </div>
+                                <p class="mb-1 small">Provides farm inputs in kind and cash (for farm labour) to smallholder farmers</p>
+                                <small class="text-muted">Deadline: 30 Nov 2023</small>
+                            </label>
+                            
+                            <label class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="subsidyProgram" id="equipmentSubsidy">
+                                    <label class="form-check-label fw-bold" for="equipmentSubsidy">
+                                        Agric Equipment Subsidy
+                                    </label>
+                                </div>
+                                <p class="mb-1 small">50% subsidy on agricultural machinery and equipment for medium-scale farmers</p>
+                                <small class="text-muted">Deadline: 31 Jan 2024</small>
+                            </label>
+                            
+                            <label class="list-group-item">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="subsidyProgram" id="seedSubsidy">
+                                    <label class="form-check-label fw-bold" for="seedSubsidy">
+                                        Improved Seed Initiative
+                                    </label>
+                                </div>
+                                <p class="mb-1 small">Free high-yield seeds for cereal crops</p>
+                                <small class="text-muted">Seasonal program</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="selectedFarm" class="form-label">Select Farm</label>
+                            <select class="form-select" id="selectedFarm" required>
+                                <option value="" selected disabled>Choose farm</option>
+                                <option>Maize Field A (2.1 ha)</option>
+                                <option>Cassava Plot (1.5 ha)</option>
+                                <option>Soybean Field (1.6 ha)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cropType" class="form-label">Crop Type</label>
+                            <select class="form-select" id="cropType" required>
+                                <option value="" selected disabled>Select crop</option>
+                                <option>Maize</option>
+                                <option>Cassava</option>
+                                <option>Soybean</option>
+                                <option>Rice</option>
+                                <option>Wheat</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="subsidyPurpose" class="form-label">Purpose of Funds</label>
+                            <textarea class="form-control" id="subsidyPurpose" rows="3" placeholder="Explain how you will use the subsidy (e.g., for buying seeds, fertilizer, equipment)" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label for="bankInfo" class="form-label">Bank Information</label>
+                            <select class="form-select" id="bankInfo" required>
+                                <option value="" selected disabled>Select your bank account</option>
+                                <option>Access Bank - 0034567890</option>
+                                <option>GTBank - 0123456789</option>
+                            </select>
+                            <small class="text-muted">Subsidy payments will be made to this account</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="subsidyForm" class="btn btn-success">
+                    <i class="bi bi-send me-1"></i> Submit Application
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sell Product Modal -->
+<div class="modal fade" id="sellProductModal" tabindex="-1" aria-labelledby="sellProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="sellProductModalLabel"><i class="bi bi-shop me-2"></i>Sell Agricultural Products</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs mb-4" id="sellProductTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="newListing-tab" data-bs-toggle="tab" data-bs-target="#newListing" type="button">New Listing</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="quickSell-tab" data-bs-toggle="tab" data-bs-target="#quickSell" type="button">Quick Sell</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auction" type="button">Start Auction</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="sellProductTabsContent">
+                    <div class="tab-pane fade show active" id="newListing" role="tabpanel">
+                        <form id="newListingForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="productType" class="form-label">Product Type</label>
+                                    <select class="form-select" id="productType" required>
+                                        <option value="" selected disabled>Select product</option>
+                                        <option>Crop</option>
+                                        <option>Livestock</option>
+                                        <option>Farm Input</option>
+                                        <option>Equipment</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="productCategory" class="form-label">Category</label>
+                                    <select class="form-select" id="productCategory" required>
+                                        <option value="" selected disabled>Select category</option>
+                                        <option>Maize</option>
+                                        <option>Rice</option>
+                                        <option>Cassava</option>
+                                        <option>Soybean</option>
+                                        <option>Poultry</option>
+                                        <option>Fertilizer</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="productTitle" class="form-label">Product Title</label>
+                                    <input type="text" class="form-control" id="productTitle" placeholder="e.g., Premium Maize (100kg bags)" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="productPrice" class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="productPrice" placeholder="0.00" required>
+                                        <span class="input-group-text">per unit</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="productQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="productQuantity" placeholder="0" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="productUnit" class="form-label">Unit</label>
+                                    <select class="form-select" id="productUnit" required>
+                                        <option>Bag</option>
+                                        <option>Kg</option>
+                                        <option>Ton</option>
+                                        <option>Liter</option>
+                                        <option>Each</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="productDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="productDescription" rows="3" placeholder="Describe your product in detail" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label for="productImages" class="form-label">Product Images</label>
+                                    <input class="form-control" type="file" id="productImages" accept="image/*" multiple>
+                                    <small class="text-muted">Upload clear photos of your product (max 5 images)</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="productLocation" class="form-label">Location</label>
+                                    <select class="form-select" id="productLocation" required>
+                                        <option value="" selected disabled>Select location</option>
+                                        <option>Kaduna</option>
+                                        <option>Kano</option>
+                                        <option>Lagos</option>
+                                        <option>Abuja</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="deliveryOption" class="form-label">Delivery Option</label>
+                                    <select class="form-select" id="deliveryOption" required>
+                                        <option>Buyer picks up</option>
+                                        <option>I can deliver</option>
+                                        <option>Third-party delivery</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="quickSell" role="tabpanel">
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> Quick Sell connects you directly with verified buyers at market price.
+                        </div>
+                        <form id="quickSellForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="qsProduct" class="form-label">What are you selling?</label>
+                                    <select class="form-select" id="qsProduct" required>
+                                        <option value="" selected disabled>Select product</option>
+                                        <option>Maize</option>
+                                        <option>Cassava</option>
+                                        <option>Soybean</option>
+                                        <option>Rice</option>
+                                        <option>Poultry</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="qsQuantity" class="form-label">Quantity Available</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="qsQuantity" required>
+                                        <select class="form-select" style="max-width: 100px;">
+                                            <option>Bags</option>
+                                            <option>Kg</option>
+                                            <option>Tonnes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Current Market Price</label>
+                                    <div class="card bg-light p-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Maize (per bag)</span>
+                                            <strong>₦28,000 - ₦30,500</strong>
+                                        </div>
+                                        <small class="text-muted">Based on current Kaduna market prices</small>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="agreeMarketPrice">
+                                        <label class="form-check-label" for="agreeMarketPrice">
+                                            I agree to sell at current market price
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="auction" role="tabpanel">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i> Auctions allow buyers to bid on your products for the best price.
+                        </div>
+                        <form id="auctionForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="auctionProduct" class="form-label">Product</label>
+                                    <select class="form-select" id="auctionProduct" required>
+                                        <option value="" selected disabled>Select product</option>
+                                        <option>Maize (100kg bags)</option>
+                                        <option>Cassava (tonnes)</option>
+                                        <option>Tractor</option>
+                                        <option>Irrigation System</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="auctionQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="auctionQuantity" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="startPrice" class="form-label">Starting Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="startPrice" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="reservePrice" class="form-label">Reserve Price (optional)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="reservePrice">
+                                    </div>
+                                    <small class="text-muted">Minimum price you're willing to accept</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="auctionDuration" class="form-label">Auction Duration</label>
+                                    <select class="form-select" id="auctionDuration" required>
+                                        <option>1 day</option>
+                                        <option selected>3 days</option>
+                                        <option>5 days</option>
+                                        <option>7 days</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="auctionEnds" class="form-label">Auction Ends</label>
+                                    <input type="text" class="form-control" id="auctionEnds" value="18 Nov 2023, 5:00 PM" disabled>
+                                </div>
+                                <div class="col-12">
+                                    <label for="auctionDescription" class="form-label">Product Description</label>
+                                    <textarea class="form-control" id="auctionDescription" rows="3" required></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="newListingForm" class="btn btn-success">
+                    <i class="bi bi-check-circle me-1"></i> Publish Listing
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Schedule Activity Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="scheduleModalLabel"><i class="bi bi-calendar-check me-2"></i>Schedule Farm Activity</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="scheduleForm">
+                    <div class="mb-3">
+                        <label for="activityType" class="form-label">Activity Type</label>
+                        <select class="form-select" id="activityType" required>
+                            <option value="" selected disabled>Select activity</option>
+                            <option>Land Preparation</option>
+                            <option>Planting</option>
+                            <option>Fertilizer Application</option>
+                            <option>Irrigation</option>
+                            <option>Pest Control</option>
+                            <option>Harvesting</option>
+                            <option>Equipment Maintenance</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="activityFarm" class="form-label">Select Farm</label>
+                        <select class="form-select" id="activityFarm" required>
+                            <option value="" selected disabled>Choose farm</option>
+                            <option>Maize Field A (2.1 ha)</option>
+                            <option>Cassava Plot (1.5 ha)</option>
+                            <option>Soybean Field (1.6 ha)</option>
+                        </select>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="activityDate" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="activityDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="activityTime" class="form-label">Time</label>
+                            <input type="time" class="form-control" id="activityTime" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="activityNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="activityNotes" rows="3" placeholder="Any special instructions..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="activityReminder">
+                            <label class="form-check-label" for="activityReminder">
+                                Set reminder notification
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="scheduleForm" class="btn btn-success">
+                    <i class="bi bi-save me-1"></i> Schedule Activity
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request Extension Officer Modal -->
+<div class="modal fade" id="extensionOfficerModal" tabindex="-1" aria-labelledby="extensionOfficerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="extensionOfficerModalLabel"><i class="bi bi-person-video3 me-2"></i>Request Extension Officer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i> Agricultural extension officers provide free technical advice and training.
+                </div>
+                
+                <form id="extensionForm">
+                    <div class="mb-3">
+                        <label for="requestType" class="form-label">Request Type</label>
+                        <select class="form-select" id="requestType" required>
+                            <option value="" selected disabled>Select request type</option>
+                            <option>Farm Visit</option>
+                            <option>Technical Advice</option>
+                            <option>Disease Diagnosis</option>
+                            <option>Soil Testing</option>
+                            <option>Training Session</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requestFarm" class="form-label">Select Farm</label>
+                        <select class="form-select" id="requestFarm" required>
+                            <option value="" selected disabled>Choose farm</option>
+                            <option>Maize Field A (2.1 ha)</option>
+                            <option>Cassava Plot (1.5 ha)</option>
+                            <option>Soybean Field (1.6 ha)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requestDate" class="form-label">Preferred Date</label>
+                        <input type="date" class="form-control" id="requestDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requestDetails" class="form-label">Details</label>
+                        <textarea class="form-control" id="requestDetails" rows="3" placeholder="Describe your specific needs..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="extensionForm" class="btn btn-success">
+                    <i class="bi bi-send me-1"></i> Send Request
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Pest/Disease Modal -->
+<div class="modal fade" id="pestReportModal" tabindex="-1" aria-labelledby="pestReportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="pestReportModalLabel"><i class="bi bi-bug me-2"></i>Report Pest or Disease</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> Early reporting helps prevent spread to other farms.
+                </div>
+                
+                <form id="pestReportForm">
+                    <div class="mb-3">
+                        <label for="affectedCrop" class="form-label">Affected Crop/Livestock</label>
+                        <select class="form-select" id="affectedCrop" required>
+                            <option value="" selected disabled>Select affected crop/livestock</option>
+                            <option>Maize</option>
+                            <option>Cassava</option>
+                            <option>Soybean</option>
+                            <option>Rice</option>
+                            <option>Poultry</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pestType" class="form-label">Pest/Disease Type</label>
+                        <input type="text" class="form-control" id="pestType" placeholder="e.g., Fall Armyworm, Cassava Mosaic" required>
+                        <small class="text-muted">If unknown, describe symptoms below</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pestDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="pestDescription" rows="3" placeholder="Describe the problem in detail..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pestPhotos" class="form-label">Upload Photos</label>
+                        <input class="form-control" type="file" id="pestPhotos" accept="image/*" multiple>
+                        <small class="text-muted">Clear photos help with identification</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="severityLevel" class="form-label">Severity Level</label>
+                        <select class="form-select" id="severityLevel" required>
+                            <option value="" selected disabled>Select severity</option>
+                            <option>Minor (less than 10% affected)</option>
+                            <option>Moderate (10-30% affected)</option>
+                            <option>Severe (30-60% affected)</option>
+                            <option>Critical (over 60% affected)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="pestReportForm" class="btn btn-success">
+                    <i class="bi bi-send me-1"></i> Submit Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
                 
                 <!-- Farm Activities -->
                 <div class="card dashboard-card mb-4">
