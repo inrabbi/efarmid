@@ -1334,6 +1334,54 @@
                 console.log('Calendar navigation clicked');
             });
         });
+
+        // Add JavaScript functionality for the quick actions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get current location for farm record
+        document.getElementById('getLocationBtn').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('farmCoordinates').value = 
+                        position.coords.latitude + ', ' + position.coords.longitude;
+                }, function(error) {
+                    alert('Error getting location: ' + error.message);
+                });
+            } else {
+                alert('Geolocation is not supported by your browser');
+            }
+        });
+        
+        // Set default date for schedule activity to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const formattedDate = tomorrow.toISOString().split('T')[0];
+        document.getElementById('activityDate').value = formattedDate;
+        
+        // Set default time to 9:00 AM
+        document.getElementById('activityTime').value = '09:00';
+        
+        // Calculate auction end date/time
+        document.getElementById('auctionDuration').addEventListener('change', function() {
+            const days = parseInt(this.value);
+            const endDate = new Date();
+            endDate.setDate(endDate.getDate() + days);
+            
+            const options = { 
+                day: 'numeric', 
+                month: 'short', 
+                year: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            };
+            document.getElementById('auctionEnds').value = endDate.toLocaleDateString('en-US', options);
+        });
+        
+        // Initialize with default 3 days
+        document.getElementById('auctionDuration').dispatchEvent(new Event('change'));
+        
+        // Set default date for extension officer request to tomorrow
+        document.getElementById('requestDate').value = formattedDate;
+    });
     </script>
 </body>
 </html>

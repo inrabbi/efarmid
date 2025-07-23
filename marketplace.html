@@ -151,7 +151,7 @@
                     </nav>
                 </div>
                 <div class="col-md-4 text-md-end">
-                    <button class="btn btn-success me-2">
+                  <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#sellProductModal">
                         <i class="bi bi-plus-circle me-1"></i> Sell Product
                     </button>
                     <button class="btn btn-outline-success">
@@ -257,7 +257,7 @@
                                         <span class="badge bg-success bg-opacity-10 text-success small">Verified Seller</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" data-bs-toggle="modal" data-bs-target="#viewDetailsModal">
                                     <button class="btn btn-sm btn-success w-100">View Details</button>
                                 </div>
                             </div>
@@ -311,7 +311,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" data-bs-toggle="modal" data-bs-target="#placeBidModal">
                                     <button class="btn btn-sm btn-success w-100">Place Bid</button>
                                 </div>
                             </div>
@@ -350,7 +350,7 @@
                                         <span class="badge bg-success bg-opacity-10 text-success small">Certified Supplier</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" data-bs-toggle="modal" data-bs-target="#viewDetailsModal">
                                     <button class="btn btn-sm btn-success w-100">View Details</button>
                                 </div>
                             </div>
@@ -429,7 +429,7 @@
                                         <span class="badge bg-success bg-opacity-10 text-success small">Verified</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" data-bs-toggle="modal" data-bs-target="#contactSellerModal">
                                     <button class="btn btn-sm btn-success w-100">Contact Seller</button>
                                 </div>
                             </div>
@@ -462,7 +462,7 @@
                                         <span class="badge bg-success bg-opacity-10 text-success small">Certified</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" data-bs-toggle="modal" data-bs-target="#addToCartModal">
                                     <button class="btn btn-sm btn-success w-100">Add to Cart</button>
                                 </div>
                             </div>
@@ -525,7 +525,7 @@
                                         <span class="badge bg-success bg-opacity-10 text-success small">Verified</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" >
                                     <button class="btn btn-sm btn-success w-100">Contact Seller</button>
                                 </div>
                             </div>
@@ -558,13 +558,776 @@
                                         <span class="badge bg-success bg-opacity-10 text-success small">New Seller</span>
                                     </div>
                                 </div>
-                                <div class="card-footer bg-white border-0">
+                                <div class="card-footer bg-white border-0" data-bs-toggle="modal" data-bs-target="#addToCartModal">
                                     <button class="btn btn-sm btn-success w-100">Add to Cart</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+<!-- Sell Product Modal -->
+<div class="modal fade" id="sellProductModal" tabindex="-1" aria-labelledby="sellProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="sellProductModalLabel"><i class="bi bi-shop me-2"></i>Sell Agricultural Products</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs mb-4" id="sellProductTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="newListing-tab" data-bs-toggle="tab" data-bs-target="#newListing" type="button">New Listing</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="quickSell-tab" data-bs-toggle="tab" data-bs-target="#quickSell" type="button">Quick Sell</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="auction-tab" data-bs-toggle="tab" data-bs-target="#auction" type="button">Start Auction</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content" id="sellProductTabsContent">
+                    <div class="tab-pane fade show active" id="newListing" role="tabpanel">
+                        <form id="newListingForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="productType" class="form-label">Product Type</label>
+                                    <select class="form-select" id="productType" required>
+                                        <option value="" selected disabled>Select product</option>
+                                        <option>Crop</option>
+                                        <option>Livestock</option>
+                                        <option>Farm Input</option>
+                                        <option>Equipment</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="productCategory" class="form-label">Category</label>
+                                    <select class="form-select" id="productCategory" required>
+                                        <option value="" selected disabled>Select category</option>
+                                        <option>Maize</option>
+                                        <option>Rice</option>
+                                        <option>Cassava</option>
+                                        <option>Soybean</option>
+                                        <option>Poultry</option>
+                                        <option>Fertilizer</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="productTitle" class="form-label">Product Title</label>
+                                    <input type="text" class="form-control" id="productTitle" placeholder="e.g., Premium Maize (100kg bags)" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="productPrice" class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="productPrice" placeholder="0.00" required>
+                                        <span class="input-group-text">per unit</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="productQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="productQuantity" placeholder="0" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="productUnit" class="form-label">Unit</label>
+                                    <select class="form-select" id="productUnit" required>
+                                        <option>Bag</option>
+                                        <option>Kg</option>
+                                        <option>Ton</option>
+                                        <option>Liter</option>
+                                        <option>Each</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="productDescription" class="form-label">Description</label>
+                                    <textarea class="form-control" id="productDescription" rows="3" placeholder="Describe your product in detail" required></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label for="productImages" class="form-label">Product Images</label>
+                                    <input class="form-control" type="file" id="productImages" accept="image/*" multiple>
+                                    <small class="text-muted">Upload clear photos of your product (max 5 images)</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="productLocation" class="form-label">Location</label>
+                                    <select class="form-select" id="productLocation" required>
+                                        <option value="" selected disabled>Select location</option>
+                                        <option>Kaduna</option>
+                                        <option>Kano</option>
+                                        <option>Lagos</option>
+                                        <option>Abuja</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="deliveryOption" class="form-label">Delivery Option</label>
+                                    <select class="form-select" id="deliveryOption" required>
+                                        <option>Buyer picks up</option>
+                                        <option>I can deliver</option>
+                                        <option>Third-party delivery</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="quickSell" role="tabpanel">
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> Quick Sell connects you directly with verified buyers at market price.
+                        </div>
+                        <form id="quickSellForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="qsProduct" class="form-label">What are you selling?</label>
+                                    <select class="form-select" id="qsProduct" required>
+                                        <option value="" selected disabled>Select product</option>
+                                        <option>Maize</option>
+                                        <option>Cassava</option>
+                                        <option>Soybean</option>
+                                        <option>Rice</option>
+                                        <option>Poultry</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="qsQuantity" class="form-label">Quantity Available</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="qsQuantity" required>
+                                        <select class="form-select" style="max-width: 100px;">
+                                            <option>Bags</option>
+                                            <option>Kg</option>
+                                            <option>Tonnes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Current Market Price</label>
+                                    <div class="card bg-light p-3">
+                                        <div class="d-flex justify-content-between">
+                                            <span>Maize (per bag)</span>
+                                            <strong>₦28,000 - ₦30,500</strong>
+                                        </div>
+                                        <small class="text-muted">Based on current Kaduna market prices</small>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="agreeMarketPrice">
+                                        <label class="form-check-label" for="agreeMarketPrice">
+                                            I agree to sell at current market price
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="auction" role="tabpanel">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i> Auctions allow buyers to bid on your products for the best price.
+                        </div>
+                        <form id="auctionForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="auctionProduct" class="form-label">Product</label>
+                                    <select class="form-select" id="auctionProduct" required>
+                                        <option value="" selected disabled>Select product</option>
+                                        <option>Maize (100kg bags)</option>
+                                        <option>Cassava (tonnes)</option>
+                                        <option>Tractor</option>
+                                        <option>Irrigation System</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="auctionQuantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" id="auctionQuantity" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="startPrice" class="form-label">Starting Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="startPrice" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="reservePrice" class="form-label">Reserve Price (optional)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₦</span>
+                                        <input type="number" class="form-control" id="reservePrice">
+                                    </div>
+                                    <small class="text-muted">Minimum price you're willing to accept</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="auctionDuration" class="form-label">Auction Duration</label>
+                                    <select class="form-select" id="auctionDuration" required>
+                                        <option>1 day</option>
+                                        <option selected>3 days</option>
+                                        <option>5 days</option>
+                                        <option>7 days</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="auctionEnds" class="form-label">Auction Ends</label>
+                                    <input type="text" class="form-control" id="auctionEnds" value="18 Nov 2023, 5:00 PM" disabled>
+                                </div>
+                                <div class="col-12">
+                                    <label for="auctionDescription" class="form-label">Product Description</label>
+                                    <textarea class="form-control" id="auctionDescription" rows="3" required></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="newListingForm" class="btn btn-success">
+                    <i class="bi bi-check-circle me-1"></i> Publish Listing
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+                <!-- View Details Modal -->
+<div class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="viewDetailsModalLabel">Product Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="productImagesCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner rounded">
+                                <div class="carousel-item active">
+                                    <img src="https://via.placeholder.com/600x400?text=Product+Image+1" class="d-block w-100" alt="Product Image">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://via.placeholder.com/600x400?text=Product+Image+2" class="d-block w-100" alt="Product Image">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://via.placeholder.com/600x400?text=Product+Image+3" class="d-block w-100" alt="Product Image">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productImagesCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3>Premium Maize (100kg bags)</h3>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="seller-rating me-3">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-half"></i>
+                                <span class="ms-1">(24 reviews)</span>
+                            </div>
+                            <span class="badge bg-success">Verified Seller</span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h2 class="text-success">₦28,000 <small class="text-muted">per bag</small></h2>
+                            <span class="badge bg-warning text-dark">Bulk discount available</span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h5>Description</h5>
+                            <p>High quality maize harvested from our farms in Kaduna. Grown with organic fertilizers and properly dried. Each bag contains 100kg of premium grade maize suitable for human consumption, animal feed, or industrial use.</p>
+                            <ul>
+                                <li>Moisture content: 12%</li>
+                                <li>Foreign matter: less than 1%</li>
+                                <li>Protein content: 9-11%</li>
+                                <li>Available: 500 bags</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+                                <span>Kaduna North, Kaduna State</span>
+                            </div>
+                            <div class="d-flex align-items-center mt-1">
+                                <i class="bi bi-calendar-check-fill text-primary me-2"></i>
+                                <span>Harvested: November 2023</span>
+                            </div>
+                        </div>
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <select class="form-select" id="quantity">
+                                    <option>1 bag</option>
+                                    <option>5 bags</option>
+                                    <option>10 bags</option>
+                                    <option>20 bags</option>
+                                    <option>50 bags</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="deliveryOption" class="form-label">Delivery</label>
+                                <select class="form-select" id="deliveryOption">
+                                    <option>Pick up</option>
+                                    <option>Seller delivery (+₦1,500)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Seller Information</h5>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="https://via.placeholder.com/50x50?text=Seller" class="rounded-circle me-3" alt="Seller">
+                                    <div>
+                                        <h6 class="mb-0">AgroAlliance Farms</h6>
+                                        <small class="text-muted">Member since 2020</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Response Rate:</span>
+                                    <strong>98%</strong>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Delivery Time:</span>
+                                    <strong>1-2 days</strong>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Transactions:</span>
+                                    <strong>247 successful</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Product Specifications</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th>Product Type</th>
+                                        <td>Crop</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Variety</th>
+                                        <td>White Maize</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Packaging</th>
+                                        <td>100kg poly bags</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Minimum Order</th>
+                                        <td>5 bags</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Shelf Life</th>
+                                        <td>12 months</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">
+                    <i class="bi bi-cart-plus me-1"></i> Add to Cart
+                </button>
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#contactSellerModal">
+                    <i class="bi bi-chat-left-text me-1"></i> Contact Seller
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Place Bid Modal -->
+<div class="modal fade" id="placeBidModal" tabindex="-1" aria-labelledby="placeBidModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="placeBidModalLabel">Place Bid</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i> You're bidding on: <strong>John Deere Tractor (2018 Model, 60HP)</strong>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Current Bid:</span>
+                            <strong class="text-success">₦5,200,000</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Minimum Increment:</span>
+                            <strong>₦50,000</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Auction Ends:</span>
+                            <strong class="text-danger">2d 4h 32m</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="bidForm">
+                    <div class="mb-3">
+                        <label for="bidAmount" class="form-label">Your Bid Amount (₦)</label>
+                        <input type="number" class="form-control" id="bidAmount" min="5250000" step="50000" value="5250000" required>
+                        <small class="text-muted">Minimum bid: ₦5,250,000 (current bid + increment)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxBid" class="form-label">Maximum Bid (₦) <small class="text-muted">- Optional</small></label>
+                        <input type="number" class="form-control" id="maxBid" placeholder="Enter your maximum bid for automatic bidding">
+                    </div>
+                    <div class="mb-3">
+                        <label for="bidNotes" class="form-label">Notes to Seller</label>
+                        <textarea class="form-control" id="bidNotes" rows="2" placeholder="Any special requests or conditions..."></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                        <label class="form-check-label" for="agreeTerms">
+                            I agree to the <a href="#">Auction Terms and Conditions</a>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="bidForm" class="btn btn-success">
+                    <i class="bi bi-hammer me-1"></i> Submit Bid
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Seller Modal -->
+<div class="modal fade" id="contactSellerModal" tabindex="-1" aria-labelledby="contactSellerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="contactSellerModalLabel">Contact Seller</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle-fill me-2"></i> You're contacting <strong>AgroAlliance Farms</strong> about: <strong>Premium Maize (100kg bags)</strong>
+                </div>
+                
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="contactSubject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="contactSubject" value="Inquiry about Premium Maize" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactMessage" class="form-label">Message</label>
+                        <textarea class="form-control" id="contactMessage" rows="4" required>Dear AgroAlliance Farms,
+
+I'm interested in your Premium Maize product. Could you please provide more information about:
+
+1. Exact moisture content
+2. Available payment methods
+3. Discount for bulk purchase (100+ bags)
+
+Also, what is your delivery timeline to Lagos?
+
+Thank you,
+[Your Name]</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contactPhone" class="form-label">Your Phone Number</label>
+                        <input type="tel" class="form-control" id="contactPhone" placeholder="+234 800 000 0000" required>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="allowDirectContact">
+                        <label class="form-check-label" for="allowDirectContact">
+                            Allow seller to contact me directly
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="contactForm" class="btn btn-success">
+                    <i class="bi bi-send me-1"></i> Send Message
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add to Cart Confirmation Modal -->
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="addToCartModalLabel"><i class="bi bi-cart-check me-2"></i> Added to Cart</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="https://via.placeholder.com/80x80?text=Product" class="rounded me-3" alt="Product" id="cartProductImage">
+                    <div>
+                        <h5 id="cartProductTitle">Premium Maize (100kg bags)</h5>
+                        <div class="d-flex justify-content-between">
+                            <span>Quantity:</span>
+                            <strong id="cartProductQty">2</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Price:</span>
+                            <strong class="text-success" id="cartProductPrice">₦56,000</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill me-2"></i> Item successfully added to your cart!
+                </div>
+                <div class="d-flex justify-content-between fw-bold py-2 border-top">
+                    <span>Cart Total:</span>
+                    <span class="text-success" id="cartTotalPreview">₦72,000</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-arrow-left me-1"></i> Continue Shopping
+                </button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                    <i class="bi bi-credit-card me-1"></i> Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Checkout Modal -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="checkoutModalLabel"><i class="bi bi-credit-card me-2"></i> Checkout</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h5 class="mb-3"><i class="bi bi-truck me-2"></i>Delivery Information</h5>
+                        <form id="deliveryForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="firstName" value="Ibrahim" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="lastName" value="Musa" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" value="+234 800 123 4567" required>
+                                </div>
+                                <div class="col-12">
+                                    <label for="deliveryAddress" class="form-label">Delivery Address</label>
+                                    <textarea class="form-control" id="deliveryAddress" rows="2" required>123 Farm Road, Kaduna North, Kaduna State</textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="state" class="form-label">State</label>
+                                    <select class="form-select" id="state" required>
+                                        <option selected>Kaduna</option>
+                                        <option>Lagos</option>
+                                        <option>Oyo</option>
+                                        <option>Kano</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" class="form-control" id="city" value="Kaduna North" required>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="saveAddress">
+                                        <label class="form-check-label" for="saveAddress">
+                                            Save this address for future orders
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <h5 class="mt-4 mb-3"><i class="bi bi-credit-card me-2"></i>Payment Method</h5>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" checked>
+                                    <label class="form-check-label" for="bankTransfer">
+                                        <i class="bi bi-bank me-2"></i> Bank Transfer
+                                    </label>
+                                </div>
+                                <div class="ps-4 mt-2 small text-muted">
+                                    You'll receive our bank details after order confirmation
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="mobileMoney">
+                                    <label class="form-check-label" for="mobileMoney">
+                                        <i class="bi bi-phone me-2"></i> Mobile Money
+                                    </label>
+                                </div>
+                                <div class="ps-4 mt-2 small text-muted">
+                                    Pay with MTN, Airtel, or Glo mobile money
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="paymentMethod" id="payOnDelivery">
+                                    <label class="form-check-label" for="payOnDelivery">
+                                        <i class="bi bi-cash me-2"></i> Pay on Delivery
+                                    </label>
+                                </div>
+                                <div class="ps-4 mt-2 small text-muted">
+                                    Available in selected locations (3% fee applies)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-5">
+                        <div class="card sticky-top" style="top: 20px;">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">Order Summary</h5>
+                                
+                                <div class="border-bottom pb-2 mb-2">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Premium Maize (2 bags)</span>
+                                        <span>₦56,000</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>NPK Fertilizer (1 bag)</span>
+                                        <span>₦12,500</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Cassava Stems</span>
+                                        <span>₦3,500</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-bottom py-2 mb-2">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Subtotal</span>
+                                        <span>₦72,000</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Delivery Fee</span>
+                                        <span>₦4,500</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span>Tax (5%)</span>
+                                        <span>₦3,600</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between fw-bold py-2">
+                                    <span>Total</span>
+                                    <span class="text-success">₦80,100</span>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                    <label class="form-check-label" for="agreeTerms">
+                                        I agree to the <a href="#">Terms and Conditions</a>
+                                    </label>
+                                </div>
+                                
+                                <button class="btn btn-success w-100" id="placeOrderBtn">
+                                    <i class="bi bi-check-circle me-1"></i> Place Order
+                                </button>
+                                
+                                <div class="text-center mt-3 small text-muted">
+                                    <i class="bi bi-shield-lock me-1"></i> Secure SSL encrypted payment
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Order Confirmation Modal -->
+<div class="modal fade" id="orderConfirmationModal" tabindex="-1" aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="orderConfirmationModalLabel"><i class="bi bi-check-circle me-2"></i> Order Confirmed</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-4">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                </div>
+                <h4 class="mb-3">Thank you for your order!</h4>
+                <p class="mb-4">Your order #AGR20231115 has been received and is being processed.</p>
+                
+                <div class="card mb-3">
+                    <div class="card-body text-start">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Order Total:</span>
+                            <strong>₦80,100</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Payment Method:</span>
+                            <strong>Bank Transfer</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>Estimated Delivery:</span>
+                            <strong>Nov 18, 2023</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>We've sent the order details to your registered email address. Our representative will contact you shortly to confirm delivery.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                    <i class="bi bi-house me-1"></i> Back to Home
+                </button>
+                <button type="button" class="btn btn-outline-success">
+                    <i class="bi bi-receipt me-1"></i> View Order Details
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
                 
                 <!-- Pagination -->
                 <nav aria-label="Products pagination" class="mt-4">
@@ -756,7 +1519,7 @@
                             </div>
                         </div>
                         
-                        <button class="btn btn-success w-100">
+                        <button class="btn btn-success w-100" >
                             <i class="bi bi-arrow-right me-1"></i> Proceed to Checkout
                         </button>
                     </div>
@@ -885,6 +1648,145 @@
             
             console.log('Marketplace page loaded');
         });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+        // ... (keep existing JavaScript code) ...
+        
+        // Cart items data
+        let cartItems = [
+            {
+                id: 1,
+                title: "Premium Maize (100kg bags)",
+                price: 28000,
+                quantity: 2,
+                image: "https://via.placeholder.com/80x80?text=Maize"
+            },
+            {
+                id: 2,
+                title: "NPK Fertilizer (50kg bags)",
+                price: 12500,
+                quantity: 1,
+                image: "https://via.placeholder.com/80x80?text=Fertilizer"
+            },
+            {
+                id: 3,
+                title: "Cassava Stems (Bundle)",
+                price: 3500,
+                quantity: 1,
+                image: "https://via.placeholder.com/80x80?text=Cassava"
+            }
+        ];
+        
+        // Function to update cart preview
+        function updateCartPreview() {
+            const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            document.querySelectorAll('.badge.rounded-pill').forEach(badge => {
+                badge.textContent = cartCount;
+            });
+            
+            const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+            document.getElementById('cartTotalPreview').textContent = `₦${cartTotal.toLocaleString()}`;
+            
+            // Update sidebar cart
+            const cartItemsContainer = document.querySelector('.card-body .mb-3');
+            if (cartItemsContainer) {
+                cartItemsContainer.innerHTML = '';
+                cartItems.forEach(item => {
+                    cartItemsContainer.innerHTML += `
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>${item.title} (${item.quantity})</span>
+                            <span>₦${(item.price * item.quantity).toLocaleString()}</span>
+                        </div>
+                    `;
+                });
+                
+                cartItemsContainer.innerHTML += `
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Total</span>
+                        <span>₦${cartTotal.toLocaleString()}</span>
+                    </div>
+                `;
+            }
+        }
+        
+        // Initialize cart preview
+        updateCartPreview();
+        
+        // Handle Add to Cart buttons
+        document.querySelectorAll('.btn-success').forEach(button => {
+            if (button.textContent.includes('Add to Cart')) {
+                button.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const product = {
+                        id: Math.floor(Math.random() * 1000),
+                        title: card.querySelector('.card-title').textContent,
+                        price: parseInt(card.querySelector('.text-success').textContent.replace(/[^0-9]/g, '')),
+                        quantity: 1,
+                        image: card.querySelector('.product-img')?.src || "https://via.placeholder.com/80x80?text=Product"
+                    };
+                    
+                    // Check if product already in cart
+                    const existingItem = cartItems.find(item => item.title === product.title);
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cartItems.push(product);
+                    }
+                    
+                    // Update cart preview
+                    updateCartPreview();
+                    
+                    // Show add to cart modal
+                    document.getElementById('cartProductTitle').textContent = product.title;
+                    document.getElementById('cartProductQty').textContent = existingItem ? existingItem.quantity : 1;
+                    document.getElementById('cartProductPrice').textContent = `₦${(product.price * (existingItem ? existingItem.quantity : 1)).toLocaleString()}`;
+                    document.getElementById('cartProductImage').src = product.image;
+                    
+                    const cartTotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+                    document.getElementById('cartTotalPreview').textContent = `₦${cartTotal.toLocaleString()}`;
+                    
+                    const modal = new bootstrap.Modal(document.getElementById('addToCartModal'));
+                    modal.show();
+                });
+            }
+        });
+        
+        // Handle Proceed to Checkout button
+        document.querySelector('.btn-success.w-100')?.addEventListener('click', function() {
+            if (this.textContent.includes('Proceed to Checkout')) {
+                const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+                modal.show();
+            }
+        });
+        
+        // Handle Place Order button
+        document.getElementById('placeOrderBtn')?.addEventListener('click', function() {
+            // Validate form
+            if (!document.getElementById('agreeTerms').checked) {
+                alert('Please agree to the terms and conditions');
+                return;
+            }
+            
+            // In a real app, you would submit the order to your backend here
+            setTimeout(() => {
+                bootstrap.Modal.getInstance(document.getElementById('checkoutModal')).hide();
+                const confirmationModal = new bootstrap.Modal(document.getElementById('orderConfirmationModal'));
+                confirmationModal.show();
+                
+                // Clear cart after successful order
+                cartItems = [];
+                updateCartPreview();
+            }, 1000);
+        });
+        
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
     </script>
 </body>
 </html>
