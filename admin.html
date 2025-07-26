@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eFarmerID - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-green: #28a745;
+            --secondary-green: #218838;
+            --dark-green: #1e7e34;
+            --light-green: #d4edda;
+            --accent-blue: #17a2b8;
+            --warning-yellow: #ffc107;
+            --danger-red: #dc3545;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-collapsed .nav-link-text {
+            display: none;
+        }
+        
+        .sidebar-collapsed .logo-text {
+            display: none;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s;
+        }
+        
+        .main-content-expanded {
+            margin-left: 80px;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-green);
+        }
+        
+        .nav-pills .nav-link:hover:not(.active) {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .stat-card {
+            border-radius: 10px;
+            transition: all 0.3s;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card-icon {
+            font-size: 2rem;
+            opacity: 0.8;
+        }
+        
+        .chart-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .map-container {
+            height: 300px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recent-activity-item {
+            border-left: 3px solid var(--primary-green);
+            transition: all 0.3s;
+        }
+        
+        .recent-activity-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .badge-pill {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .toggle-btn {
+            position: fixed;
+            left: 235px;
+            top: 20px;
+            z-index: 1100;
+            background-color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .toggle-btn-collapsed {
+            left: 65px;
+        }
+        
+        @media (max-width: 992px) {
+            .sidebar {
+                left: -250px;
+            }
+            
+            .sidebar-collapsed {
+                left: 0;
+                width: 80px;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .toggle-btn {
+                left: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="p-3 d-flex align-items-center">
+            <i class="bi bi-tree-fill text-success fs-4 me-2"></i>
+            <span class="logo-text fs-5 fw-bold">eFarmerID</span>
+        </div>
+        <hr class="bg-secondary mx-3 my-1">
+        <ul class="nav nav-pills flex-column mb-auto px-3">
+            <li class="nav-item">
+                <a href="#" class="nav-link active">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    <span class="nav-link-text">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-people me-2"></i>
+                    <span class="nav-link-text">Agents</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-person-check me-2"></i>
+                    <span class="nav-link-text">Verifications</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-map me-2"></i>
+                    <span class="nav-link-text">Coverage</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-flag me-2"></i>
+                    <span class="nav-link-text">Fraud Alerts</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-graph-up me-2"></i>
+                    <span class="nav-link-text">Reports</span>
+                </a>
+            </li>
+            <li class="nav-item mt-3">
+                <a href="#" class="nav-link text-white">
+                    <i class="bi bi-gear me-2"></i>
+                    <span class="nav-link-text">Settings</span>
+                </a>
+            </li>
+        </ul>
+        <hr class="bg-secondary mx-3 my-1">
+        <div class="px-3 pb-3">
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown">
+                    <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Admin" class="rounded-circle me-2" width="32" height="32">
+                    <span class="nav-link-text">Admin User</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Button -->
+    <div class="toggle-btn" id="toggleBtn">
+        <i class="bi bi-chevron-left" id="toggleIcon"></i>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content p-4" id="mainContent">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Dashboard Overview</h2>
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="timePeriodDropdown" data-bs-toggle="dropdown">
+                    <i class="bi bi-calendar me-2"></i> Last 30 Days
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">Last 7 Days</a></li>
+                    <li><a class="dropdown-item" href="#">Last 30 Days</a></li>
+                    <li><a class="dropdown-item" href="#">This Quarter</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card stat-card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-2">Farmers Verified</h6>
+                                <h3 class="card-title mb-0">10,392</h3>
+                                <small class="text-success">
+                                    <i class="bi bi-arrow-up"></i> 12.5% from last month
+                                </small>
+                            </div>
+                            <div class="stat-card-icon text-success">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card stat-card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-2">Active Agents</h6>
+                                <h3 class="card-title mb-0">142</h3>
+                                <small class="text-success">
+                                    <i class="bi bi-arrow-up"></i> 86% active today
+                                </small>
+                            </div>
+                            <div class="stat-card-icon text-primary">
+                                <i class="bi bi-person-badge-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card stat-card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-2">Pending Sync</h6>
+                                <h3 class="card-title mb-0">327</h3>
+                                <small class="text-warning">
+                                    <i class="bi bi-exclamation-triangle"></i> Offline verifications
+                                </small>
+                            </div>
+                            <div class="stat-card-icon text-warning">
+                                <i class="bi bi-cloud-arrow-up-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card stat-card bg-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="card-subtitle text-muted mb-2">Fraud Alerts</h6>
+                                <h3 class="card-title mb-0">4</h3>
+                                <small class="text-danger">
+                                    <i class="bi bi-exclamation-octagon"></i> Require review
+                                </small>
+                            </div>
+                            <div class="stat-card-icon text-danger">
+                                <i class="bi bi-flag-fill"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="chart-container">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5>Verification Trends</h5>
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-outline-secondary active">Daily</button>
+                            <button class="btn btn-outline-secondary">Weekly</button>
+                            <button class="btn btn-outline-secondary">Monthly</button>
+                        </div>
+                    </div>
+                    <div style="height: 300px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; border-radius: 5px;">
+                        <div class="text-center text-muted">
+                            <i class="bi bi-bar-chart-line fs-1"></i>
+                            <p>Verification chart would display here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="chart-container h-100">
+                    <h5 class="mb-3">Verification by LGA</h5>
+                    <div style="height: 250px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa; border-radius: 5px;">
+                        <div class="text-center text-muted">
+                            <i class="bi bi-pie-chart fs-1"></i>
+                            <p>Regional distribution chart</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Map and Recent Activity -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <h5 class="mb-3">Verification Coverage</h5>
+                    <div class="map-container">
+                        <div class="location-pill">
+                            <i class="bi bi-geo-alt-fill"></i> 142 active agents
+                        </div>
+                        <div class="h-100 d-flex align-items-center justify-content-center">
+                            <div class="text-center text-muted">
+                                <i class="bi bi-map fs-1"></i>
+                                <p>Verification heatmap would display here</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="chart-container h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Recent Activity</h5>
+                        <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item recent-activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Duplicate Biometrics Detected</h6>
+                                    <small class="text-muted">Agent: John (Kaduna)</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">1 hour ago</small>
+                                    <span class="badge bg-danger badge-pill ms-2">Fraud</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">New Verification Completed</h6>
+                                    <small class="text-muted">Agent: Amina (Oyo)</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">3 hours ago</small>
+                                    <span class="badge bg-success badge-pill ms-2">Verified</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Low-Quality Photo Uploaded</h6>
+                                    <small class="text-muted">Agent: Yusuf (Kano)</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">5 hours ago</small>
+                                    <span class="badge bg-warning badge-pill ms-2">Review</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="list-group-item recent-activity-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="mb-1">Pending Sync Completed</h6>
+                                    <small class="text-muted">12 offline records synced</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">Today, 8:30 AM</small>
+                                    <span class="badge bg-primary badge-pill ms-2">System</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Agents Table -->
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Agent Management</h5>
+                    <div>
+                        <button class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="bi bi-download"></i> Export
+                        </button>
+                        <button class="btn btn-sm btn-success">
+                            <i class="bi bi-plus"></i> Add Agent
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Agent</th>
+                                <th>Contact</th>
+                                <th>LGAs Covered</th>
+                                <th>Verifications</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/women/44.jpg" class="avatar me-3" alt="Amina Yusuf">
+                                        <div>
+                                            <h6 class="mb-0">Amina Yusuf</h6>
+                                            <small class="text-muted">AGT-78901</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>+2348012345678</td>
+                                <td>Kaduna, Zaria</td>
+                                <td>128</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/32.jpg" class="avatar me-3" alt="John Okafor">
+                                        <div>
+                                            <h6 class="mb-0">John Okafor</h6>
+                                            <small class="text-muted">AGT-78902</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>+2348098765432</td>
+                                <td>Oyo East</td>
+                                <td>92</td>
+                                <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://randomuser.me/api/portraits/men/41.jpg" class="avatar me-3" alt="Mohammed Bello">
+                                        <div>
+                                            <h6 class="mb-0">Mohammed Bello</h6>
+                                            <small class="text-muted">AGT-78903</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>+2348055512345</td>
+                                <td>Kano Municipal</td>
+                                <td>156</td>
+                                <td><span class="badge bg-success">Active</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <small class="text-muted">Showing 1 to 3 of 142 agents</small>
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Previous</a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Toggle sidebar
+        document.getElementById('toggleBtn').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            sidebar.classList.toggle('sidebar-collapsed');
+            mainContent.classList.toggle('main-content-expanded');
+            this.classList.toggle('toggle-btn-collapsed');
+            
+            if (sidebar.classList.contains('sidebar-collapsed')) {
+                toggleIcon.className = 'bi bi-chevron-right';
+            } else {
+                toggleIcon.className = 'bi bi-chevron-left';
+            }
+        });
+        
+        // Simulate data loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // In a real app, you would fetch this data from an API
+            console.log('Dashboard data loaded');
+            
+            // Simulate connection status changes
+            setInterval(() => {
+                const statusBadge = document.querySelector('#connectionStatus .badge');
+                if (Math.random() > 0.8) {
+                    statusBadge.className = 'badge bg-danger';
+                    statusBadge.textContent = 'Offline';
+                    console.log('Connection lost - simulating offline mode');
+                } else {
+                    statusBadge.className = 'badge bg-success';
+                    statusBadge.textContent = 'Online';
+                }
+            }, 30000);
+        });
+    </script>
+</body>
+</html>
